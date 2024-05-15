@@ -1,0 +1,52 @@
+
+body {
+    width: 100vw;
+    height: 100vh;
+    
+    box-sizing: border-box;
+
+    margin: 0;
+    
+    border: 1px solid black;
+
+    background-color: transparent;
+}
+
+
+#container {
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 4px solid;
+
+    background-color: transparent;
+}
+
+#text-field {
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    outline: none;
+    border: 1px solid black;
+
+    background-color: transparent;
+
+    font-family: Segoe UI;
+    font-size: medium;
+    color: black;
+    text-align: center;
+    
+    resize: none;
+}
