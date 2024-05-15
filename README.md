@@ -1,7 +1,7 @@
 
-# <img src="https://github.com/JoSimon05/POST-IT/blob/Preview/icons/note_icon.ico" width="23"/> POST-IT (preview)
+# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note_icon.ico" width="23"/> POST-IT
 
-[![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Preview/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
+[![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
 ![platform](https://img.shields.io/badge/Platform-Windows-0078d4?style=flat-square&labelColor=30363d)
 ![language](https://img.shields.io/badge/Language-JavaScript-f7df1E?style=flat-square&labelColor=30363d)
 
@@ -9,17 +9,17 @@
 
 > **A minimal reminder app based on colorful sticky notes, which you can pin on your desktop**
 
-![note1](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/note_1.png)
-![note2](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/note_2.png)
-![note3](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/note_3.png)
-![note4](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/note_4.png)
+![note1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_1.png)
+![note2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_2.png)
+![note3](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_3.png)
+![note4](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_4.png)
 
 <br>
 
 ## SHORTCUTS
 **ALT+N** &nbsp;&#10230;&nbsp; open text Input bar
 
-  ![input](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/input.png)
+  ![input](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/input.png)
 
 <br> **ALT+C** &nbsp;&#10230;&nbsp; choose color of current Note
 
@@ -64,7 +64,7 @@ Every Note is stored inside a local database and reloaded on application startup
 
 ## TRAY CONTEXT MENU
 > [!TIP]
-> ![tray](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/tray.png)
+> ![tray](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/tray.png)
 
 The Tray context menu is the application main menu and It contains a lot of useful functions. You can find it in the lower right corner of your desktop (on taskbar).
 
@@ -97,11 +97,11 @@ Updates are automatically checked and downloaded on startup, then you can choose
 > Before installation by *installer.exe*, the system antivirus could show a security alert. DON'T WORRY! \
 > You just need to click on "**More info**" ("Ulteriori informazioni" in the image below)
 > 
-> ![alert1](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/installer_alert_1.png)
+> ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_1.png)
 > 
 > finally, click on the button "**Run anyways**" ("Esegui comunque" in the image below) that appears next.
 > 
-> ![alert2](https://github.com/JoSimon05/POST-IT/blob/Preview/.github/installer_alert_2.png)
+> ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_2.png)
 >
 > > That's because I still cannot afford the *authentication certificate* for native applications (It's not that cheap...)
 
