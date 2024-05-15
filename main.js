@@ -304,7 +304,7 @@ if (!instanceLock) {
                     { type: "separator" },
 
                     {   // delete all notes
-                        label: "Clear all",
+                        label: "Clear all Notes",
                         id: "clearAllID",
                         enabled: someNotes,
                         click: () => clearAllNotes()
