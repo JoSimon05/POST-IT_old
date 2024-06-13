@@ -6,21 +6,25 @@ const fs = require("fs")
 const path = require("path")
 
 
+// about environment
+const isDev = !app.isPackaged
+
+
 // about paths
 const dataFile = "data.json"
 const dataFolder = ".database"
 const appFolder = path.join(app.getPath("appData"), name)
 
-const dataFilePath = path.join(appFolder, dataFolder, dataFile)
 const dataFilePathDev = path.join(__dirname, dataFolder, dataFile)
+const dataFilePath = path.join(appFolder, dataFolder, dataFile)
 
-const dataFolderPath = path.join(appFolder, dataFolder)
 const dataFolderPathDev = path.join(__dirname, dataFolder)
+const dataFolderPath = path.join(appFolder, dataFolder)
 
-const checkDataFilePath = app.isPackaged ? dataFilePath : dataFilePathDev
-const checkDataFolderPath = app.isPackaged ? dataFolderPath : dataFolderPathDev
+const checkDataFilePath = isDev ? dataFilePathDev : dataFilePath
+const checkDataFolderPath = isDev ? dataFolderPathDev : dataFolderPath
 
-// default data file content
+// default data file structure
 const defaultData = {
     firstLaunch: true,
     showAlerts: true,
@@ -36,27 +40,27 @@ function checkDataFile() {
     const appFolderExists = fs.existsSync(appFolder)
     const dataFolderExists = fs.existsSync(checkDataFolderPath)
     const dataFileExists = fs.existsSync(checkDataFilePath)
-    
-    if (app.isPackaged && !appFolderExists) fs.mkdirSync(appFolder)
+
+    if (!isDev && !appFolderExists) fs.mkdirSync(appFolder)
 
     if (!dataFolderExists) {
 
-        if (!app.isPackaged) console.log(`'${dataFolder}' folder no longer exists`)
+        if (isDev) console.log(`'${dataFolder}' folder no longer exists`)
 
         fs.mkdirSync(checkDataFolderPath)
 
-        if (!app.isPackaged) console.log(`'${dataFolder}' folder restored`)
+        if (isDev) console.log(`'${dataFolder}' folder restored`)
     }
 
     if (!dataFileExists) {
 
-        if (!app.isPackaged) console.log(`'${dataFile}' file no longer exists`)
+        if (isDev) console.log(`'${dataFile}' file no longer exists`)
 
         const defaultDataString = JSON.stringify(defaultData, null, 4)
 
         fs.writeFileSync(checkDataFilePath, defaultDataString)
 
-        if (!app.isPackaged) console.log(`'${dataFile}' file restored`)
+        if (isDev) console.log(`'${dataFile}' file restored`)
     }
 }
 
@@ -66,30 +70,30 @@ function checkDataStructure() {
     const dataForCheck = JSON.parse(fs.readFileSync(checkDataFilePath))
     const defaultKeys = Object.keys(defaultData)
     const currentKeys = Object.keys(dataForCheck)
-    
+
     if (currentKeys.toString() != defaultKeys.toString()) {
-    
-        if (!app.isPackaged) console.log(`'${dataFile}' file to update`)
-    
+
+        if (isDev) console.log(`'${dataFile}' file to update`)
+
         // save and restore last settings
-        //const lastShowAlerts = data.showAlerts   // (salva nelle nuove versioni)
+        //const lastShowAlerts = data.showAlerts   //TODO (salva nelle nuove versioni)
         const lastAutoLaunch = data.autoLaunch
         const lastLastColorIndex = data.lastColorIndex
         const lastNotesArray = data.notesArray
-    
+
         const lastData = {
             firstLaunch: false,
-            showAlerts: true,
+            showAlerts: true,   //TODO (salva nelle nuove versioni)
             autoLaunch: lastAutoLaunch,
             lastColorIndex: lastLastColorIndex,
             notesArray: lastNotesArray
         }
-    
+
         // update data file
         data = lastData
         updateDataFile()
-    
-        if (!app.isPackaged) console.log(`'${dataFile}' file updated`)
+
+        if (isDev) console.log(`'${dataFile}' file updated`)
     }
 }
 
@@ -103,7 +107,7 @@ checkDataFile() // check data file/folder
 
 let data = JSON.parse(fs.readFileSync(checkDataFilePath))
 
-checkDataStructure()
+checkDataStructure() // check data file structure
 
 
 // about app
@@ -168,11 +172,14 @@ let isUpdating = false
 app.setName(name)
 app.setAppUserModelId(info.displayAppID)
 app.setJumpList([]) // empty app jumplist
-app.setLoginItemSettings({
-    openAtLogin: true,
-    enabled: data.autoLaunch
-})
 //!app.disableHardwareAcceleration()
+
+if (!isDev) {
+    app.setLoginItemSettings({
+        openAtLogin: true,
+        enabled: data.autoLaunch
+    })
+}
 
 
 // check app instance
@@ -195,7 +202,7 @@ if (!instanceLock) {
         screenWidth = screen.getPrimaryDisplay().size.width
         screenHeight = screen.getPrimaryDisplay().size.height
 
-        
+
         // show help on first launch
         if (data.firstLaunch) {
 
@@ -275,15 +282,18 @@ if (!instanceLock) {
 
                     {   // check for updates
                         label: "Check for updates...",
-                        id: "checkUpdateID",
-                        click: () => app.isPackaged ? checkForUpdatesFromMenu() : console.log("no updates")
+                        id: "checkUpdatesID",
+                        visible: true,
+                        enabled: !isDev,
+                        click: () => checkForUpdatesFromMenu()
                     },
 
                     {   // install update
                         label: "Install update!",
-                        id: "downloadUpdateID",
+                        id: "installUpdateID",
                         visible: false,
-                        click: () => app.isPackaged ? confirmUpdate() : console.log("no updates")
+                        enabled: !isDev,
+                        click: () => confirmUpdate()
                     },
 
                     {   // choose if show notifications
@@ -298,6 +308,8 @@ if (!instanceLock) {
                         label: "Run on startup",
                         id: "autoLaunchID",
                         type: "checkbox",
+                        checked: data.autoLaunch,
+                        enabled: !isDev,
                         click: () => toggleAutoLaunch()
                     },
 
@@ -356,7 +368,7 @@ if (!instanceLock) {
                 role: "copy",
                 accelerator: "CTRL+C"
             },
-            
+
             {   // paste text
                 label: "Paste",
                 role: "paste",
@@ -394,14 +406,20 @@ if (!instanceLock) {
         tray.on("click", () => {
 
             // check app auto-launch changes (by system)
-            trayMenu.getMenuItemById("autoLaunchID").checked = app.getLoginItemSettings().launchItems[0].enabled
+            if (!isDev) {
+                trayMenu.getMenuItemById("autoLaunchID").checked = app.getLoginItemSettings().launchItems[0].enabled
+            }
+
             tray.popUpContextMenu(trayMenu)
         })
 
         tray.on("right-click", () => {
 
             // check app auto-launch changes (by system)
-            trayMenu.getMenuItemById("autoLaunchID").checked = app.getLoginItemSettings().launchItems[0].enabled
+            if (!isDev) {
+                trayMenu.getMenuItemById("autoLaunchID").checked = app.getLoginItemSettings().launchItems[0].enabled
+            }
+
             tray.popUpContextMenu(trayMenu)
         })
 
@@ -497,7 +515,7 @@ if (!instanceLock) {
                     noteToRestore.show()
 
                     const noteIndex = data.notesArray.findIndex(n => n.id === restoredID)
-                    
+
                     // update data file (already checked)
                     data.notesArray[noteIndex].id = updatedID
                     updateDataFile()
@@ -513,7 +531,7 @@ if (!instanceLock) {
 
 
         // check if app is packaged/dev mode
-        if (app.isPackaged) {
+        if (!isDev) {
 
             // auto-check for updates (packaged)
             checkForUpdatesOnStartup()
@@ -522,7 +540,6 @@ if (!instanceLock) {
 
             // log app details (dev mode)
             console.log(
-                `auto-launch: ${data.autoLaunch}`,
                 `\nsystem-theme: ${nativeTheme.shouldUseDarkColors ? "dark" : "light"}`,
                 `\nselected-color: ${colorsArray[colorIndex]}`,
                 `\nrestored-notes: ${data.notesArray.length}`
@@ -534,19 +551,14 @@ if (!instanceLock) {
     // execute before app quit
     app.on("before-quit", () => {
 
-        // check and update data file
-        checkDataFile()
-        data.autoLaunch = app.getLoginItemSettings().launchItems[0].enabled // check auto-launch value
-        updateDataFile()
+        // check auto-launch value and update data file
+        if (!isDev) {
+            checkDataFile()
+            data.autoLaunch = app.getLoginItemSettings().launchItems[0].enabled
+            updateDataFile()
+        }
 
         globalShortcut.unregisterAll() // unregister all shortcuts
-
-        // delete auto-launch registry key (dev mode)
-        if (!app.isPackaged) {
-            app.setLoginItemSettings({
-                openAtLogin: false
-            })
-        }
     })
 
 
@@ -913,8 +925,8 @@ if (!instanceLock) {
         autoUpdater.on("update-downloaded", (info) => {
 
             // update tray menu
-            trayMenu.getMenuItemById("checkUpdateID").visible = false
-            trayMenu.getMenuItemById("downloadUpdateID").visible = true
+            trayMenu.getMenuItemById("checkUpdatesID").visible = false
+            trayMenu.getMenuItemById("installUpdateID").visible = true
 
             // build and show update message box
             dialog.showMessageBox({
