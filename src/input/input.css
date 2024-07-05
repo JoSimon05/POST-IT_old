@@ -2,11 +2,11 @@
 body {
     width: 100vw;
     height: 100vh;
-    
+
     box-sizing: border-box;
 
     margin: 0;
-    
+
     border: 1px solid black;
 
     background-color: transparent;
@@ -47,6 +47,6 @@ body {
     font-size: medium;
     color: black;
     text-align: center;
-    
+
     resize: none;
 }

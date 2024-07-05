@@ -26,7 +26,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
 
 #title-text {
@@ -83,7 +83,7 @@ li {
     position: fixed;
     left: 0;
     bottom: 0;
-    
+
     color: rgba(0, 0, 0, 1);
 }
 
@@ -101,7 +101,7 @@ li {
     bottom: 0;
 
     background-color: transparent;
-    
+
     cursor: pointer;
 }
 
@@ -114,6 +114,8 @@ li {
     top: calc(100% - 90px);
 
     background: linear-gradient(-45deg, transparent 50%, white 50%);
+
+    transition: width 0.1s ease, height 0.1s ease;
 }
 
 #corner {
@@ -124,14 +126,14 @@ li {
     right: 0;
     bottom: 0;
 
-    background: linear-gradient(-45deg, transparent 50% , rgb(225, 225, 225, 1) 50%);
+    background: linear-gradient(-45deg, transparent 50%, rgb(225, 225, 225, 1) 50%);
+
+    transition: width 0.1s ease, height 0.1s ease;
 }
 
 #corner-container:hover #corner-box {
     width: 90px;
     height: 90px;
-
-    transition: width 0.1s ease, height 0.1s ease;
 }
 
 #corner-container:hover #corner {
@@ -139,6 +141,4 @@ li {
     height: 90px;
 
     box-shadow: -5px 10px 20px 0px rgba(0, 0, 0, 0.5);
-    
-    transition: width 0.1s ease, height 0.1s ease;
 }
