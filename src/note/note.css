@@ -1,4 +1,3 @@
-
 body {
     -webkit-app-region: drag;
 
@@ -51,10 +50,12 @@ body {
     display: -webkit-box;
     white-space: pre-wrap;
     word-wrap: break-word;
-    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    -webkit-line-clamp: 4;
+    line-clamp: 4; /* prevent compatibility warning */
 }
 
 
