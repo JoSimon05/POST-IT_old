@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isValidLink) {
 
-            const updatedText = textFromData.replace(linkToOpen, `<span id="link-text" title="${linkToOpen}"><u>${linkToOpen}</u></span>`)
+            const updatedText = textFromData.replace(linkToOpen, `<span id="link-text" title="(click to open, right-click to copy)\n${linkToOpen}"><u>${linkToOpen}</u></span>`)
 
             noteText.innerHTML = updatedText
 
