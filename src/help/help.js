@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // copy example text
         clipboard.writeText(copyExample.textContent)
-        copied.innerHTML = "copied!"
+        copied.innerText = "copied!"
     })
 
 
@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ipcRenderer.send("openExampleLink") // IPC: send "openExampleLink" event
     })
 
-    linkExample.addEventListener("contextmenu", (event) => {
-        event.preventDefault()
+    linkExample.addEventListener("contextmenu", (e) => {
+        e.preventDefault()
 
         // copy example link
         clipboard.writeText("https://example.com/post-it/help/open-link-example")

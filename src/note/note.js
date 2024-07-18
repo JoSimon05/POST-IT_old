@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // IPC: display note content
-    ipcRenderer.on("displayNote", (event, data) => {
+    ipcRenderer.on("displayNote", (e, data) => {
 
         noteID = data.id   // id -1
         const textFromData = data.text
@@ -59,18 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // mouse events (link)
             linkText.addEventListener("mouseenter", () => {
-                message.innerHTML = "Open link..."
+                message.innerText = "Open link..."
                 linkText.style.color = "rgba(0, 0, 0, 0.5)"
             })
 
             linkText.addEventListener("mouseleave", () => {
 
                 if (message.innerText == "Open link..." || message.innerText == "") {
-                    message.innerHTML = ""
+                    message.innerText = ""
 
                 } else {
 
-                    message.innerHTML = "Copied!"
+                    message.innerText = "Copied!"
 
                     // overwrite current timeout
                     if (timeoutID) clearTimeout(timeoutID)
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (message.innerText == "Open link..." || message.innerText == "Delete...") {
                             clearTimeout(timeoutID)
 
-                        } else message.innerHTML = ""
+                        } else message.innerText = ""
 
                     }, 3000)
                 }
@@ -89,19 +89,19 @@ document.addEventListener("DOMContentLoaded", () => {
             })
 
             linkText.addEventListener("mousedown", () => {
-                message.innerHTML = ""
+                message.innerText = ""
             })
 
             linkText.addEventListener("click", () => {
                 ipcRenderer.send("openLink", { url: linkToOpen, id: noteID }) // IPC: send "openLink" event
             })
 
-            linkText.addEventListener("contextmenu", (event) => {
-                event.preventDefault()
+            linkText.addEventListener("contextmenu", (e) => {
+                e.preventDefault()
 
                 // copy link
                 clipboard.writeText(linkToOpen)
-                message.innerHTML = "Copied!"
+                message.innerText = "Copied!"
 
                 // overwrite current timeout
                 if (timeoutID) clearTimeout(timeoutID)
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (message.innerText == "Open link..." || message.innerText == "Delete...") {
                         clearTimeout(timeoutID)
 
-                    } else message.innerHTML = ""
+                    } else message.innerText = ""
 
                 }, 3000)
             })
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             linkText.style.cursor = "pointer"
 
         } else {
-            noteText.innerHTML = textFromData
+            noteText.innerText = textFromData
             noteText.style.cursor = "pointer"
         }
 
@@ -127,6 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.style.background = `linear-gradient(-45deg, transparent 12.5%, rgba(${colorsArray[data.colorIndex]}, 1) 0%)`
         cornerBox.style.background = `linear-gradient(-45deg, transparent 50%, rgba(${colorsArray[data.colorIndex]}, 1) 50%)`
         corner.style.background = `linear-gradient(-45deg, transparent 50%, rgba(${secColorsArray[data.colorIndex]}, 1) 50%)`
+
+        // show drag message
+        if (data.message) message.innerText = "Drag it!"
     })
 
 
@@ -134,20 +137,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // mouse events (text - no link)
     noteText.addEventListener("mouseenter", () => {
         if (!isValidLink) {
-            message.innerHTML = "Copy..."
+            message.innerText = "Copy..."
             noteText.style.color = "rgba(0, 0, 0, 0.5)"
         }
     })
+
     noteText.addEventListener("mouseleave", () => {
 
         if (!isValidLink) {
 
             if (message.innerText == "Copy..." || message.innerText == "") {
-                message.innerHTML = ""
+                message.innerText = ""
 
             } else {
 
-                message.innerHTML = "Copied!"
+                message.innerText = "Copied!"
 
                 // overwrite current timeout
                 if (timeoutID) clearTimeout(timeoutID)
@@ -157,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (message.innerText == "Copy..." || message.innerText == "Delete...") {
                         clearTimeout(timeoutID)
 
-                    } else message.innerHTML = ""
+                    } else message.innerText = ""
 
                 }, 3000)
             }
@@ -169,16 +173,17 @@ document.addEventListener("DOMContentLoaded", () => {
     noteText.addEventListener("mousedown", () => {
 
         if (!isValidLink) {
-            message.innerHTML = ""
+            message.innerText = ""
         }
     })
+    
     noteText.addEventListener("click", () => {
 
         if (!isValidLink) {
 
             // copy text
             clipboard.writeText(noteText.textContent)
-            message.innerHTML = "Copied!"
+            message.innerText = "Copied!"
 
             // overwrite current timeout
             if (timeoutID) clearTimeout(timeoutID)
@@ -188,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (message.innerText == "Copy..." || message.innerText == "Delete...") {
                     clearTimeout(timeoutID)
 
-                } else message.innerHTML = ""
+                } else message.innerText = ""
 
             }, 3000)
         }
@@ -197,11 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // mouse events (corner - no link)
     cornerContainer.addEventListener("mouseenter", () => {
-        message.innerHTML = "Delete..."
+        message.innerText = "Delete..."
     })
 
     cornerContainer.addEventListener("mouseleave", () => {
-        message.innerHTML = ""
+        message.innerText = ""
     })
 
     cornerContainer.addEventListener("click", () => {
@@ -212,12 +217,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // IPC: pin note
     ipcRenderer.on("pinNote", () => {
-        pinText.innerHTML = "Pinned!"
+        pinText.innerText = "Pinned!"
     })
 
 
     // IPC: unpin note
     ipcRenderer.on("unpinNote", () => {
-        pinText.innerHTML = ""
+        pinText.innerText = ""
+    })
+
+
+    // IPC: hide drag message
+    ipcRenderer.on("hideDragMessage", () => {
+        message.innerText = ""
     })
 })

@@ -29,8 +29,8 @@ const defaultData = {
     firstLaunch: true,
     showAlerts: true,
     autoLaunch: true,
-    lastColorIndex: 1, // yellow (default on first launch)
-    notesArray: []
+    colorIndex: 1, // yellow (default on first launch)
+    notes: []
 }
 
 
@@ -70,23 +70,23 @@ function checkDataStructure() {
     const dataForCheck = JSON.parse(fs.readFileSync(checkDataFilePath))
     const defaultKeys = Object.keys(defaultData)
     const currentKeys = Object.keys(dataForCheck)
-
+    
     if (currentKeys.toString() != defaultKeys.toString()) {
 
         if (isDev) console.log(`'${dataFile}' file to update`)
 
         // save and restore last settings
-        //const lastShowAlerts = data.showAlerts   //TODO (salva nelle nuove versioni)
+        const lastShowAlerts = data.showAlerts
         const lastAutoLaunch = data.autoLaunch
-        const lastLastColorIndex = data.lastColorIndex
-        const lastNotesArray = data.notesArray
+        const lastColorIndex = data.colorIndex
+        const lastNotes = data.notes
 
         const lastData = {
             firstLaunch: false,
-            showAlerts: true,   //TODO (salva nelle nuove versioni)
-            autoLaunch: lastAutoLaunch,
-            lastColorIndex: lastLastColorIndex,
-            notesArray: lastNotesArray
+            showAlerts: lastShowAlerts ? lastShowAlerts : defaultData.showAlerts,
+            autoLaunch: lastAutoLaunch ? lastAutoLaunch : defaultData.autoLaunch,
+            colorIndex: lastColorIndex ? lastColorIndex : defaultData.colorIndex,
+            notes: lastNotes ? lastNotes : defaultData.notes
         }
 
         // update data file
@@ -126,7 +126,7 @@ const clearIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "clea
 
 // about colors
 const colorsArray = ["orange", "yellow", "green", "blue", "violet", "pink"]
-let colorIndex = data.lastColorIndex
+let colorIndex = data.colorIndex
 
 // about color icons
 const orangeIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "orange.ico")).resize({ width: 14, height: 14 })
@@ -155,7 +155,7 @@ let tray
 let trayMenu
 let inputMenu
 let arePinned = false
-let someNotes = data.notesArray.length != 0 ? true : false
+let someNotes = data.notes.length != 0 ? true : false
 
 // about positions
 let screenOrigin
@@ -236,7 +236,7 @@ if (!instanceLock) {
             { type: "separator" },
 
             {   // show input
-                label: "Open Input bar",
+                label: "Open Input",
                 accelerator: inputShoutcut,
                 click: () => showInputWindow()
             },
@@ -484,10 +484,10 @@ if (!instanceLock) {
 
 
         // restore unclosed notes
-        if (data.notesArray.length != 0) {
+        if (data.notes.length != 0) {
 
             // load and show restored notes
-            data.notesArray.forEach(noteToRestore => {
+            data.notes.forEach(noteToRestore => {
 
                 const restoredID = noteToRestore.id
                 const restoredText = noteToRestore.text
@@ -509,15 +509,16 @@ if (!instanceLock) {
                     noteToRestore.webContents.send("displayNote", {
                         id: updatedID,
                         text: restoredText,
-                        colorIndex: restoredColor
+                        colorIndex: restoredColor,
+                        message: false
                     })
 
                     noteToRestore.show()
 
-                    const noteIndex = data.notesArray.findIndex(n => n.id === restoredID)
+                    const noteIndex = data.notes.findIndex(n => n.id === restoredID)
 
                     // update data file (already checked)
-                    data.notesArray[noteIndex].id = updatedID
+                    data.notes[noteIndex].id = updatedID
                     updateDataFile()
                 })
 
@@ -526,7 +527,7 @@ if (!instanceLock) {
             })
 
             // update tray
-            tray.setToolTip(`${appName} (${data.notesArray.length})`)
+            tray.setToolTip(`${appName} (${data.notes.length})`)
         }
 
 
@@ -542,7 +543,7 @@ if (!instanceLock) {
             console.log(
                 `\nsystem-theme: ${nativeTheme.shouldUseDarkColors ? "dark" : "light"}`,
                 `\nselected-color: ${colorsArray[colorIndex]}`,
-                `\nrestored-notes: ${data.notesArray.length}`
+                `\nrestored-notes: ${data.notes.length}`
             )
         }
     })
@@ -598,17 +599,17 @@ if (!instanceLock) {
 
         const inputWindow = new BrowserWindow({
 
-            title: "Type something or paste a link...",
+            title: "Input",
             icon: inputIcon,
 
-            width: 500,
-            height: 60,
+            width: 180,
+            height: 180,
 
             center: true,
 
             frame: false,
             thickFrame: false,
-            opacity: 1,
+            transparent: true,
 
             maximizable: false,
             minimizable: false,
@@ -634,10 +635,6 @@ if (!instanceLock) {
     // FUNCTION: build note
     function buildNoteWindow() {
 
-        // set random note spawn
-        notePosX = Math.floor(Math.random() * (screenWidth - 180))
-        notePosY = Math.floor(Math.random() * (screenHeight - 180))
-
         const noteWindow = new BrowserWindow({
 
             icon: noteIcon,
@@ -645,8 +642,7 @@ if (!instanceLock) {
             width: 180,
             height: 180,
 
-            x: notePosX,
-            y: notePosY,
+            center: true,
 
             frame: false,
             thickFrame: false,
@@ -766,8 +762,8 @@ if (!instanceLock) {
             inputWin.setEnabled(false)
             inputWin.setEnabled(true)
         })
-        ////inputWin.on("system-context-menu", (event) => {
-        ////    event.preventDefault()
+        ////inputWin.on("system-context-menu", (e) => {
+        ////    e.preventDefault()
         ////})
     }
 
@@ -839,8 +835,8 @@ if (!instanceLock) {
                 helpWin.setEnabled(false)
                 helpWin.setEnabled(true)
             })
-            ////helpWin.on("system-context-menu", (event) => {
-            ////    event.preventDefault()
+            ////helpWin.on("system-context-menu", (e) => {
+            ////    e.preventDefault()
             ////})
 
         } else helpWin.focus() // focus if already opened
@@ -850,7 +846,7 @@ if (!instanceLock) {
     // FUNCTION: move all notes on top
     function showAllNotes() {
 
-        data.notesArray.forEach(note => {
+        data.notes.forEach(note => {
 
             const noteFromId = BrowserWindow.fromId(note.id + 1)
             noteFromId.show()
@@ -861,7 +857,7 @@ if (!instanceLock) {
     // FUNCTION: pin all notes
     function pinAllNotes() {
 
-        data.notesArray.forEach(note => {
+        data.notes.forEach(note => {
 
             const noteFromId = BrowserWindow.fromId(note.id + 1)
 
@@ -882,7 +878,7 @@ if (!instanceLock) {
     // FUNCTION: unpin all notes
     function unpinAllNotes() {
 
-        data.notesArray.forEach(note => {
+        data.notes.forEach(note => {
 
             const noteFromId = BrowserWindow.fromId(note.id + 1)
 
@@ -896,7 +892,6 @@ if (!instanceLock) {
         // update tray menu
         trayMenu.getMenuItemById("unpinNotesID").visible = false
         trayMenu.getMenuItemById("pinNotesID").visible = true
-
         trayMenu.getMenuItemById("showNotesID").enabled = true
     }
 
@@ -963,7 +958,7 @@ if (!instanceLock) {
             })
         })
 
-        // throw errors
+        // throw updater errors
         autoUpdater.on("error", (error) => {
             dialog.showErrorBox(`${appName} UPDATER ERROR`, error)
         })
@@ -1097,7 +1092,7 @@ if (!instanceLock) {
 
             if (result.response === 0) {
 
-                data.notesArray.forEach(note => {
+                data.notes.forEach(note => {
 
                     const noteFromId = BrowserWindow.fromId(note.id + 1)
 
@@ -1108,7 +1103,7 @@ if (!instanceLock) {
 
                 // check and update data file
                 checkDataFile()
-                data.notesArray = []
+                data.notes = []
                 updateDataFile()
 
                 // update tray
@@ -1133,7 +1128,7 @@ if (!instanceLock) {
 
         // check and update data file
         checkDataFile()
-        data.lastColorIndex = colorIndex
+        data.colorIndex = colorIndex
         updateDataFile()
     }
 
@@ -1144,29 +1139,34 @@ if (!instanceLock) {
         // save position of all notes (x, y)
         win.on("moved", () => {
 
-            data.notesArray.forEach(note => {
+            data.notes.forEach(note => {
 
                 const noteFromId = BrowserWindow.fromId(note.id + 1)
                 const [updatedPosX, updatedPosY] = noteFromId.getPosition()
 
                 if (noteFromId) {
 
-                    const noteIndex = data.notesArray.findIndex(n => n.id === note.id)
+                    const noteIndex = data.notes.findIndex(n => n.id === note.id)
 
                     // check and update data file
                     checkDataFile()
-                    data.notesArray[noteIndex].x = updatedPosX
-                    data.notesArray[noteIndex].y = updatedPosY
+                    data.notes[noteIndex].x = updatedPosX
+                    data.notes[noteIndex].y = updatedPosY
                     updateDataFile()
                 }
             })
+        })
+        
+        // hide drag message when moving
+        win.on("will-move", () => {
+            win.webContents.send("hideDragMessage") // IPC: send "hideDragMessage" event
         })
 
         // prevent note system menu
         const WM_INITMENU = 0x0116;
         win.hookWindowMessage(WM_INITMENU, () => {
 
-            data.notesArray.forEach(note => {
+            data.notes.forEach(note => {
 
                 const noteFromId = BrowserWindow.fromId(note.id + 1)
 
@@ -1174,17 +1174,17 @@ if (!instanceLock) {
                 noteFromId.setEnabled(true)
             })
         })
-        ////win.on("system-context-menu", (event) => {
-        ////    event.preventDefault()
+        ////win.on("system-context-menu", (e) => {
+        ////    e.preventDefault()
         ////})
     }
 
 
 
     // IPC: create note
-    ipcMain.on("createNote", (event, noteText) => {
+    ipcMain.on("createNote", (e, noteText) => {
 
-        if (data.notesArray.length == 10) {
+        if (data.notes.length == 10) {
 
             // prevent if too many notes
             inputWin.webContents.send("clearInput") // IPC: send "clearInput" event (prevent lag)
@@ -1192,15 +1192,11 @@ if (!instanceLock) {
 
         } else {
 
-            // hide and clear input
-            inputWin.hide()
-            inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
-
             // load note
             noteWin = buildNoteWindow()
             noteWin.loadFile("src/note/note.html")
 
-            noteWin.setPosition(notePosX, notePosY)
+            let [notePosX, notePosY] = noteWin.getPosition() // get centered position
 
             // execute when ready
             noteWin.on("ready-to-show", () => {
@@ -1209,7 +1205,8 @@ if (!instanceLock) {
                 noteWin.webContents.send("displayNote", {   // only notes IDs
                     id: noteWin.id - 1,
                     text: noteText,
-                    colorIndex: colorIndex
+                    colorIndex: colorIndex,
+                    message: true
                 })
 
                 noteWin.show()
@@ -1232,13 +1229,19 @@ if (!instanceLock) {
 
                 // check and update data file
                 checkDataFile()
-                data.notesArray.push(noteData)
+                data.notes.push(noteData)
                 updateDataFile()
 
                 // update tray
-                tray.setToolTip(`${appName} (${data.notesArray.length})`)
+                tray.setToolTip(`${appName} (${data.notes.length})`)
 
                 showAllNotes() // move all notes on top
+
+                // hide and clear input after 100ms (prevent input hiding first)
+                setTimeout(() => {
+                    inputWin.hide()
+                    inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
+                }, 100);
             })
 
             // manage note events
@@ -1260,26 +1263,26 @@ if (!instanceLock) {
 
 
     // IPC: delete note
-    ipcMain.on("deleteNote", (event, noteID) => {   // id -1
+    ipcMain.on("deleteNote", (e, noteID) => {   // id -1
 
         const noteFromId = BrowserWindow.fromId(noteID + 1)
 
         if (noteFromId) noteFromId.close()
 
-        const noteIndex = data.notesArray.findIndex(n => n.id === noteID + 1 - 1) // arrays start from 0!
+        const noteIndex = data.notes.findIndex(n => n.id === noteID + 1 - 1) // arrays start from 0!
 
         if (noteIndex !== -1) {
 
             // check and update data file
             checkDataFile()
-            data.notesArray.splice(noteIndex, 1)
+            data.notes.splice(noteIndex, 1)
             updateDataFile()
         }
 
         // update tray
-        tray.setToolTip(`${appName}${data.notesArray.length != 0 ? ` (${data.notesArray.length})` : ""}`)
+        tray.setToolTip(`${appName}${data.notes.length != 0 ? ` (${data.notes.length})` : ""}`)
 
-        if (data.notesArray.length == 0) {
+        if (data.notes.length == 0) {
 
             arePinned = false
 
@@ -1300,7 +1303,7 @@ if (!instanceLock) {
 
 
     // IPC: open link in default browser
-    ipcMain.on("openLink", (event, data) => {
+    ipcMain.on("openLink", (e, data) => {
 
         const noteFromId = BrowserWindow.fromId(data.id + 1)
 
