@@ -97,7 +97,7 @@ Updates are automatically checked and downloaded on startup, then you can choose
 > 
 > ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_1.png)
 > 
-> finally, click on the button "**Run anyways**" that appears next.
+> finally, click on the button "**Run anyway**" that appears next.
 > 
 > ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_2.png)
 >
