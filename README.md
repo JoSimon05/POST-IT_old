@@ -19,8 +19,6 @@
 ## SHORTCUTS
 **ALT+N** &nbsp;&#10230;&nbsp; open text Input bar
 
-  ![input](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/input.png)
-
 <br> **ALT+C** &nbsp;&#10230;&nbsp; choose color of current Note
 
   > Color menu can only be displayed when Input bar is opened
@@ -41,14 +39,14 @@
 
 <br>
 
-## LOCAL SAVES
+## LOCAL STORAGE
 Every Note is stored inside a local database and reloaded on application startup.
 
 > [!NOTE]
 > **POST-IT** remembers content, color and position of all Notes
 > 
 > ```
-> "notesArray": [
+> "notes": [
 >     {
 >         "id": 1,
 >         "text": "This is a Note!",
@@ -63,10 +61,10 @@ Every Note is stored inside a local database and reloaded on application startup
 <br>
 
 ## TRAY CONTEXT MENU
+The Tray context menu is the application main menu and It contains a lot of useful functions. You can find it in the lower right corner of your desktop (on taskbar).
+
 > [!TIP]
 > ![tray](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/tray.png)
-
-The Tray context menu is the application main menu and It contains a lot of useful functions. You can find it in the lower right corner of your desktop (on taskbar).
 
 <br>
 
@@ -82,7 +80,7 @@ Updates are automatically checked and downloaded on startup, then you can choose
 **POST-IT** has been created to be as user-friendly as possible, It's simple to use and It provides an overview of the main features of the application (see "**Help?**" in Tray context menu).
 
 > [!IMPORTANT]
-> Due to aesthetic issues, you can only interact with Notes by using mouse cursor
+> Due to aesthetic and functional issues, you can only interact with Notes by using mouse cursor
 
 <br>
 
@@ -95,15 +93,15 @@ Updates are automatically checked and downloaded on startup, then you can choose
 
 > [!WARNING]
 > Before installation by *installer.exe*, the system antivirus could show a security alert. DON'T WORRY! \
-> You just need to click on "**More info**" ("Ulteriori informazioni" in the image below)
+> You just need to click on "**More info**"
 > 
 > ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_1.png)
 > 
-> finally, click on the button "**Run anyways**" ("Esegui comunque" in the image below) that appears next.
+> finally, click on the button "**Run anyways**" that appears next.
 > 
 > ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_2.png)
 >
-> > That's because I still cannot afford the *authentication certificate* for native applications (It's not that cheap...)
+> > That's because *authentication certificate* for native applications is missing yet (It's not that cheap...)
 
 <br>
 
