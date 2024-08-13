@@ -2,7 +2,7 @@
 # <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note_icon.ico" width="23"/> POST-IT
 
 [![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
-![language](https://img.shields.io/badge/Language-JavaScript-f7df1E?style=flat-square&labelColor=30363d)
+![framework](https://img.shields.io/badge/Framework-Electron-47848F?style=flat-square&labelColor=30363d)
 ![platform](https://img.shields.io/badge/Platform-Windows_(tested_on_W11)-0078d4?style=flat-square&labelColor=30363d)
 
 <br>
