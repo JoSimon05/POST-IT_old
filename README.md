@@ -16,6 +16,12 @@
 
 <br>
 
+## DEMO
+
+![demo](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/demo.gif)
+
+<br>
+
 ## SHORTCUTS
 **ALT+N** &nbsp;&#10230;&nbsp; open text Input bar
 
