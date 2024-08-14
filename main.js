@@ -1328,6 +1328,6 @@ if (!instanceLock) {
             return { action: "deny" }
         })
 
-        shell.openExternal("https://example.com/post-it/help/open-link-example") // open example link
+        shell.openExternal("https://example.com") // open example link
     })
 }
