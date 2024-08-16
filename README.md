@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note_icon.ico" width="32"/> POST-IT
+# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note.ico" width="32"/> POST-IT
 
 [![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
 ![framework](https://img.shields.io/badge/Framework-Electron-47848F?style=flat-square&labelColor=30363d)
@@ -9,10 +9,10 @@
 
 > **A minimal reminder app based on colorful sticky notes, which you can pin on your desktop**
 
-![note1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_1.png)
-![note2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_2.png)
-![note3](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_3.png)
-![note4](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_4.png)
+![note1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note1.png)
+![note2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note2.png)
+![note3](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note3.png)
+![note4](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note4.png)
 
 <br>
 
@@ -41,7 +41,7 @@
 
   > Help cannot be closed by pressing the shortcut again
 
-<br> **SHIFT+ALT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray)
+<br> **SHIFT+ALT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray-context-menu)
 
 <br>
 
@@ -51,7 +51,7 @@ Every Note is stored inside a local database and reloaded on application startup
 > [!NOTE]
 > **POST-IT** remembers content, color and position of all Notes
 > 
-> ```
+> ```json
 > "notes": [
 >     {
 >         "id": 1,
@@ -78,7 +78,7 @@ The Tray context menu is the application main menu and It contains a lot of usef
 Updates are automatically checked and downloaded on startup, then you can choose when to install them.
 
 > [!NOTE]
-> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#local-saves)
+> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#local-storage)
 
 <br>
 
@@ -90,7 +90,7 @@ Updates are automatically checked and downloaded on startup, then you can choose
 
 <br>
 
-# TRY POST-IT!
+# Try POST-IT!
 **Check [Releases section](https://github.com/JoSimon05/POST-IT/releases) and download the latest version available.**
 
 > You just need to download this file:&nbsp; **POST-IT_{version}_setup.exe**
@@ -101,11 +101,11 @@ Updates are automatically checked and downloaded on startup, then you can choose
 > Before installation by *installer.exe*, the system antivirus could show a security alert. DON'T WORRY! \
 > You just need to click on "**More info**"
 > 
-> ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_1.png)
+> ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installation1.png)
 > 
 > finally, click on the button "**Run anyway**" that appears next.
 > 
-> ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installer_alert_2.png)
+> ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installation2.png)
 >
 > > That's because *authentication certificate* for native applications is missing yet (It's not that cheap...)
 
