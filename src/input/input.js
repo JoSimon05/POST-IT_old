@@ -5,13 +5,14 @@ const linkify = require("linkifyjs")
 document.addEventListener("DOMContentLoaded", () => {
 
     const textField = document.getElementById("text-field")
+    const message = document.getElementById("message-field")
     const fakeCorner = document.getElementById("fake-corner")
 
     let lastText = null
     let timeoutID
 
     const defaultPlaceholder = "Type something or paste a link..."
-    textField.placeholder = defaultPlaceholder
+    const defaultMessage = "Text input"
 
     const colorsArray = [
         "255, 193, 74",   // orange
@@ -39,9 +40,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // execute on any input
     textField.addEventListener("input", () => {
 
+        message.innerText = defaultMessage
         textField.style.height = "1px"
         textField.style.height = `${textField.scrollHeight + 2}px`
 
+        // show pin message
+        if (textField.value.length > 0) {
+            message.innerText = '"Enter" to pin'
+
+        } else message.innerText = defaultMessage
+
+        // show max characters message
         if (textField.value.length > 50) {
 
             const linkFromText = linkify.find(textField.value)
@@ -100,11 +109,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 // prevent if blank/spaced text
                 if (!/\S/.test(textField.value)) {
                     textField.value = ""
+                    textField.style.height = "50px"
+                    message.innerText = defaultMessage
 
                 } else {
 
                     // IPC: send "createNote" event
                     ipcRenderer.send("createNote", textField.value)
+                    
+                    // clear input after 100ms (prevent visual glitch)
+                    setTimeout(() => {
+                        textField.value = ""
+                        textField.style.height = "50px"
+                        message.innerText = defaultMessage
+
+                    }, 100)
                 }
             }
         }
@@ -117,10 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // IPC: clear input text field
+    // IPC: clear input
     ipcRenderer.on("clearInput", () => {
         textField.value = ""
         textField.style.height = "50px"
+        message.innerText = defaultMessage
     })
 
 

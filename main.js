@@ -114,11 +114,11 @@ checkDataStructure() // check data file structure
 const appName = info.displayName
 
 // about icons
-const inputIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "input.ico")).resize({ width: 24, height: 24 })
-const helpIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "help.ico")).resize({ width: 24, height: 24 })
+const inputIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "input.ico"))
+const helpIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "help.ico"))
 const noteIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "note.ico"))
-const noteIconWhite = nativeImage.createFromPath(path.join(__dirname, "icons", "note_white.ico")).resize({ width: 12, height: 12 })
-const noteIconBlack = nativeImage.createFromPath(path.join(__dirname, "icons", "note_black.ico")).resize({ width: 12, height: 12 })
+const noteIconWhite = nativeImage.createFromPath(path.join(__dirname, "icons", "note_white.ico"))
+const noteIconBlack = nativeImage.createFromPath(path.join(__dirname, "icons", "note_black.ico"))
 const updateIconLow = nativeImage.createFromPath(path.join(__dirname, "icons", "update_low.ico"))
 const updateIconHigh = nativeImage.createFromPath(path.join(__dirname, "icons", "update_high.ico"))
 const alertIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "alert.ico"))
@@ -129,12 +129,12 @@ const colorsArray = ["orange", "yellow", "green", "blue", "violet", "pink"]
 let colorIndex = data.colorIndex
 
 // about color icons
-const orangeIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "orange.ico")).resize({ width: 14, height: 14 })
-const yellowIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "yellow.ico")).resize({ width: 14, height: 14 })
-const greenIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "green.ico")).resize({ width: 14, height: 14 })
-const blueIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "blue.ico")).resize({ width: 14, height: 14 })
-const violetIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "violet.ico")).resize({ width: 14, height: 14 })
-const pinkIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "pink.ico")).resize({ width: 14, height: 14 })
+const orangeIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "orange.ico"))
+const yellowIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "yellow.ico"))
+const greenIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "green.ico"))
+const blueIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "blue.ico"))
+const violetIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "violet.ico"))
+const pinkIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "pink.ico"))
 
 // about shortcuts
 const inputShoutcut = "ALT+N"
@@ -236,7 +236,7 @@ if (!instanceLock) {
             { type: "separator" },
 
             {   // show input
-                label: "Open Input",
+                label: "Text input",
                 accelerator: inputShoutcut,
                 click: () => showInputWindow()
             },
@@ -599,7 +599,7 @@ if (!instanceLock) {
 
         const inputWindow = new BrowserWindow({
 
-            title: "Input",
+            title: "Text input",
             icon: inputIcon,
 
             width: 180,
@@ -762,9 +762,6 @@ if (!instanceLock) {
             inputWin.setEnabled(false)
             inputWin.setEnabled(true)
         })
-        ////inputWin.on("system-context-menu", (e) => {
-        ////    e.preventDefault()
-        ////})
     }
 
 
@@ -835,9 +832,6 @@ if (!instanceLock) {
                 helpWin.setEnabled(false)
                 helpWin.setEnabled(true)
             })
-            ////helpWin.on("system-context-menu", (e) => {
-            ////    e.preventDefault()
-            ////})
 
         } else helpWin.focus() // focus if already opened
     }
@@ -900,7 +894,7 @@ if (!instanceLock) {
     // FUNCTION: check for updates automatically (on startup)
     function checkForUpdatesOnStartup() {
 
-        // auto-update setup
+        // updater setup
         autoUpdater.autoDownload = false
         autoUpdater.autoInstallOnAppQuit = false
 
@@ -926,8 +920,8 @@ if (!instanceLock) {
             // build and show update message box
             dialog.showMessageBox({
                 icon: updateIconHigh,
-                message: `New update available! (${info.version})`,
-                buttons: ["Install", "Later..."],
+                message: `New update available!   ( ${info.displayVersion}  ->  v${updateInfo.version} )`,
+                buttons: ["Install", "Not now"],
                 noLink: true,
                 defaultId: 0,
                 cancelId: 1
@@ -1174,9 +1168,6 @@ if (!instanceLock) {
                 noteFromId.setEnabled(true)
             })
         })
-        ////win.on("system-context-menu", (e) => {
-        ////    e.preventDefault()
-        ////})
     }
 
 
@@ -1237,10 +1228,9 @@ if (!instanceLock) {
 
                 showAllNotes() // move all notes on top
 
-                // hide and clear input after 100ms (prevent input hiding first)
+                // hide input after 100ms (prevent input hiding first)
                 setTimeout(() => {
                     inputWin.hide()
-                    inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
                 }, 100);
             })
 
