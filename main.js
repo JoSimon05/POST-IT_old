@@ -117,10 +117,8 @@ const appName = info.displayName
 const inputIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "input.ico"))
 const helpIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "help.ico"))
 const noteIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "note.ico"))
-const noteIconWhite = nativeImage.createFromPath(path.join(__dirname, "icons", "note_white.ico"))
-const noteIconBlack = nativeImage.createFromPath(path.join(__dirname, "icons", "note_black.ico"))
-const updateIconLow = nativeImage.createFromPath(path.join(__dirname, "icons", "update_low.ico"))
-const updateIconHigh = nativeImage.createFromPath(path.join(__dirname, "icons", "update_high.ico"))
+const updateIconLow = nativeImage.createFromPath(path.join(__dirname, "icons", "update-low.ico"))
+const updateIconHigh = nativeImage.createFromPath(path.join(__dirname, "icons", "update-high.ico"))
 const alertIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "alert.ico"))
 const clearIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "clear.ico"))
 
@@ -129,12 +127,12 @@ const colorsArray = ["orange", "yellow", "green", "blue", "violet", "pink"]
 let colorIndex = data.colorIndex
 
 // about color icons
-const orangeIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "orange.ico"))
-const yellowIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "yellow.ico"))
-const greenIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "green.ico"))
-const blueIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "blue.ico"))
-const violetIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "violet.ico"))
-const pinkIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "pink.ico"))
+const orangeIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "orange.ico")).resize({ width: 14, height: 14 })
+const yellowIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "yellow.ico")).resize({ width: 14, height: 14 })
+const greenIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "green.ico")).resize({ width: 14, height: 14 })
+const blueIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "blue.ico")).resize({ width: 14, height: 14 })
+const violetIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "violet.ico")).resize({ width: 14, height: 14 })
+const pinkIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "colors", "pink.ico")).resize({ width: 14, height: 14 })
 
 // about shortcuts
 const inputShoutcut = "ALT+N"
@@ -217,20 +215,9 @@ if (!instanceLock) {
         // build tray menu
         trayMenu = Menu.buildFromTemplate([
 
-            {   // title (white icon)
+            {   // title
                 label: `${appName} ${info.displayVersion}`,
-                id: "titleWhiteID",
                 enabled: false,
-                icon: noteIconWhite,
-                visible: nativeTheme.shouldUseDarkColors ? true : false
-            },
-
-            {   // title (black icon)
-                label: `${appName} ${info.displayVersion}`,
-                id: "titleBlackID",
-                enabled: false,
-                icon: noteIconBlack,
-                visible: nativeTheme.shouldUseDarkColors ? false : true
             },
 
             { type: "separator" },
@@ -383,20 +370,6 @@ if (!instanceLock) {
                 accelerator: "CTRL+A"
             }
         ])
-
-
-        // toggle title icon theme (in tray menu)
-        nativeTheme.on("updated", () => {
-
-            if (nativeTheme.shouldUseDarkColors) {
-                trayMenu.getMenuItemById("titleWhiteID").visible = true
-                trayMenu.getMenuItemById("titleBlackID").visible = false
-
-            } else {
-                trayMenu.getMenuItemById("titleWhiteID").visible = false
-                trayMenu.getMenuItemById("titleBlackID").visible = true
-            }
-        })
 
 
         // tray setup
