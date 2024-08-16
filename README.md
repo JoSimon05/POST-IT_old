@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note_icon.ico" width="23"/> POST-IT
+# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note_icon.ico" width="32"/> POST-IT
 
 [![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
 ![framework](https://img.shields.io/badge/Framework-Electron-47848F?style=flat-square&labelColor=30363d)
@@ -13,6 +13,12 @@
 ![note2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_2.png)
 ![note3](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_3.png)
 ![note4](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note_4.png)
+
+<br>
+
+## DEMO
+
+![demo](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/demo.gif)
 
 <br>
 
