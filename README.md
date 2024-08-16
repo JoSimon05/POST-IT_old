@@ -41,7 +41,7 @@
 
   > Help cannot be closed by pressing the shortcut again
 
-<br> **SHIFT+ALT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray)
+<br> **SHIFT+ALT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray-context-menu)
 
 <br>
 
@@ -78,7 +78,7 @@ The Tray context menu is the application main menu and It contains a lot of usef
 Updates are automatically checked and downloaded on startup, then you can choose when to install them.
 
 > [!NOTE]
-> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#local-saves)
+> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#local-storage)
 
 <br>
 
