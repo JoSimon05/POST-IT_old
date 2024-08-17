@@ -870,23 +870,17 @@ if (!instanceLock) {
     function checkForUpdatesOnStartup() {
 
         // updater setup
-        autoUpdater.autoDownload = false
+        autoUpdater.autoDownload = true
         autoUpdater.autoInstallOnAppQuit = false
 
         autoUpdater.checkForUpdates() // check for updates
 
-        // execute if update is available
-        autoUpdater.on("update-available", () => {
+        // show notification when update is downloaded
+        autoUpdater.on("update-downloaded", (info) => {
 
             // update tray
             tray.setImage(updateIconLow)
             tray.setToolTip("Update available!")
-
-            autoUpdater.downloadUpdate() // download update (automatically)
-        })
-
-        // execute when update is downloaded
-        autoUpdater.on("update-downloaded", (info) => {
 
             // update tray menu
             trayMenu.getMenuItemById("checkUpdatesID").visible = false
@@ -938,7 +932,7 @@ if (!instanceLock) {
 
         autoUpdater.checkForUpdates() // check for updates
 
-        // execute if no update is available
+        // show notification if no update is available
         autoUpdater.on("update-not-available", () => {
 
             if (data.showAlerts) {
