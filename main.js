@@ -89,7 +89,6 @@ function checkDataStructure() {
             notes: lastNotes ? lastNotes : defaultData.notes
         }
 
-        // update data file
         data = lastData
         updateDataFile()
 
@@ -206,8 +205,8 @@ if (!instanceLock) {
 
             showHelpWindow()
 
-            // update data file (already checked)
             data.firstLaunch = false
+
             updateDataFile()
         }
 
@@ -490,8 +489,8 @@ if (!instanceLock) {
 
                     const noteIndex = data.notes.findIndex(n => n.id === restoredID)
 
-                    // update data file (already checked)
                     data.notes[noteIndex].id = updatedID
+
                     updateDataFile()
                 })
 
@@ -527,8 +526,11 @@ if (!instanceLock) {
 
         // check auto-launch value and update data file
         if (!isDev) {
+
             checkDataFile()
+
             data.autoLaunch = app.getLoginItemSettings().launchItems[0].enabled
+
             updateDataFile()
         }
 
@@ -893,7 +895,7 @@ if (!instanceLock) {
             // build and show update message box
             dialog.showMessageBox({
                 icon: updateIconHigh,
-                message: `New update available!   ( ${info.displayVersion}  ->  v${updateInfo.version} )`,
+                message: `New update available!   ( ${info.displayVersion} )  ->  ( v${updateInfo.version} )`,
                 buttons: ["Install", "Not now"],
                 noLink: true,
                 defaultId: 0,
@@ -919,9 +921,8 @@ if (!instanceLock) {
                         updateHelpNotif.on("close", () => updateHelpNotif.close())
                         updateHelpNotif.on("click", () => updateHelpNotif.close())
                     }
-                }
 
-                if (message.response === 0) installUpdate()
+                } else installUpdate()
             })
         })
 
@@ -966,9 +967,10 @@ if (!instanceLock) {
     // FUNCTION: install update immediately
     function installUpdate() {
 
-        // check and update data file
         checkDataFile()
+
         data.firstLaunch = true
+
         updateDataFile()
 
         isUpdating = true
@@ -979,54 +981,30 @@ if (!instanceLock) {
     // FUNCTION: choose if show notifications
     function toggleShowAlerts() {
 
-        if (data.showAlerts) {
+        checkDataFile()
 
-            // check and update data file
-            checkDataFile()
-            data.showAlerts = false
-            updateDataFile()
+        data.showAlerts = data.showAlerts ? false : true
 
-        } else {
-
-            // check and update data file
-            checkDataFile()
-            data.showAlerts = true
-            updateDataFile()
-        }
+        updateDataFile()
     }
 
 
     // FUNCTION: choose if run on startup
     function toggleAutoLaunch() {
 
-        if (data.autoLaunch) {
+        checkDataFile()
+        
+        data.autoLaunch = data.autoLaunch ? false : true
 
-            // check and update data file
-            checkDataFile()
-            data.autoLaunch = false
-            updateDataFile()
+        // set auto-launch value
+        app.setLoginItemSettings({
+            openAtLogin: true,
+            enabled: data.autoLaunch ? false : true
+        })
 
-            // set auto-launch value
-            app.setLoginItemSettings({
-                openAtLogin: true,
-                enabled: false
-            })
-
-        } else {
-
-            // check and update data file
-            checkDataFile()
-            data.autoLaunch = true
-            updateDataFile()
-
-            // set auto-launch value
-            app.setLoginItemSettings({
-                openAtLogin: true,
-                enabled: true
-            })
-        }
+        updateDataFile()
     }
-
+    
 
     // FUNCTION: delete all notes
     function clearAllNotes() {
@@ -1034,15 +1012,15 @@ if (!instanceLock) {
         // build and show clear message box
         dialog.showMessageBox({
             icon: clearIcon,
-            message: "Do you want to delete all your Notes on desktop?",
+            message: "Do you want to delete all Notes on your desktop?",
             buttons: ["Yes", "No"],
             noLink: true,
             defaultId: 1,
             cancelId: 1
 
-        }).then(result => {
+        }).then(message => {
 
-            if (result.response === 0) {
+            if (message.response === 0) {
 
                 data.notes.forEach(note => {
 
@@ -1053,9 +1031,10 @@ if (!instanceLock) {
 
                 arePinned = false
 
-                // check and update data file
                 checkDataFile()
+
                 data.notes = []
+
                 updateDataFile()
 
                 // update tray
@@ -1078,9 +1057,10 @@ if (!instanceLock) {
         colorIndex = index
         inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
 
-        // check and update data file
         checkDataFile()
+
         data.colorIndex = colorIndex
+
         updateDataFile()
     }
 
@@ -1100,10 +1080,11 @@ if (!instanceLock) {
 
                     const noteIndex = data.notes.findIndex(n => n.id === note.id)
 
-                    // check and update data file
                     checkDataFile()
+
                     data.notes[noteIndex].x = updatedPosX
                     data.notes[noteIndex].y = updatedPosY
+
                     updateDataFile()
                 }
             })
@@ -1176,9 +1157,10 @@ if (!instanceLock) {
                     y: notePosY
                 }
 
-                // check and update data file
                 checkDataFile()
+
                 data.notes.push(noteData)
+
                 updateDataFile()
 
                 // update tray
@@ -1221,9 +1203,10 @@ if (!instanceLock) {
 
         if (noteIndex !== -1) {
 
-            // check and update data file
             checkDataFile()
+
             data.notes.splice(noteIndex, 1)
+
             updateDataFile()
         }
 
