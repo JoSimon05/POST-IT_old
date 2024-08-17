@@ -70,7 +70,7 @@ function checkDataStructure() {
     const dataForCheck = JSON.parse(fs.readFileSync(checkDataFilePath))
     const defaultKeys = Object.keys(defaultData)
     const currentKeys = Object.keys(dataForCheck)
-    
+
     if (currentKeys.toString() != defaultKeys.toString()) {
 
         if (isDev) console.log(`'${dataFile}' file to update`)
@@ -280,7 +280,7 @@ if (!instanceLock) {
                         id: "installUpdateID",
                         visible: false,
                         enabled: !isDev,
-                        click: () => confirmUpdate()
+                        click: () => installUpdate()
                     },
 
                     {   // choose if show notifications
@@ -921,7 +921,7 @@ if (!instanceLock) {
                     }
                 }
 
-                if (message.response === 0) confirmUpdate() // wait for confirmation
+                if (message.response === 0) installUpdate()
             })
         })
 
@@ -963,31 +963,16 @@ if (!instanceLock) {
     }
 
 
-    // FUNCTION: confirm update installation
-    function confirmUpdate() {
+    // FUNCTION: install update immediately
+    function installUpdate() {
 
-        // build and show installation message box
-        dialog.showMessageBox({
-            icon: updateIconHigh,
-            message: "Do you want to proceed with the installation?",
-            buttons: ["Yes", "No"],
-            noLink: true,
-            defaultId: 0,
-            cancelId: 1
+        // check and update data file
+        checkDataFile()
+        data.firstLaunch = true
+        updateDataFile()
 
-        }).then(result => {
-
-            if (result.response === 0) {
-
-                // check and update data file
-                checkDataFile()
-                data.firstLaunch = true
-                updateDataFile()
-
-                isUpdating = true
-                autoUpdater.quitAndInstall() // quit and install update
-            }
-        })
+        isUpdating = true
+        autoUpdater.quitAndInstall() // quit and install update
     }
 
 
@@ -1123,7 +1108,7 @@ if (!instanceLock) {
                 }
             })
         })
-        
+
         // hide drag message when moving
         win.on("will-move", () => {
             win.webContents.send("hideDragMessage") // IPC: send "hideDragMessage" event
