@@ -28,6 +28,7 @@ const checkDataFolderPath = isDev ? dataFolderPathDev : dataFolderPath
 const defaultData = {
     firstLaunch: true,
     showAlerts: true,
+    showMessages: true,
     autoLaunch: true,
     colorIndex: 1, // yellow (default on first launch)
     notes: []
@@ -77,6 +78,7 @@ function checkDataStructure() {
 
         // save and restore last settings
         const lastShowAlerts = data.showAlerts
+        const lastShowMessages = data.showMessages
         const lastAutoLaunch = data.autoLaunch
         const lastColorIndex = data.colorIndex
         const lastNotes = data.notes
@@ -84,12 +86,14 @@ function checkDataStructure() {
         const lastData = {
             firstLaunch: false,
             showAlerts: lastShowAlerts ? lastShowAlerts : defaultData.showAlerts,
+            showMessages: lastShowMessages ? lastShowMessages : defaultData.showMessages,
             autoLaunch: lastAutoLaunch ? lastAutoLaunch : defaultData.autoLaunch,
             colorIndex: lastColorIndex ? lastColorIndex : defaultData.colorIndex,
             notes: lastNotes ? lastNotes : defaultData.notes
         }
 
         data = lastData
+
         updateDataFile()
 
         if (isDev) console.log(`'${dataFile}' file updated`)
@@ -152,14 +156,12 @@ let tray
 let trayMenu
 let inputMenu
 let arePinned = false
-let someNotes = data.notes.length != 0 ? true : false
+let someNotes = data.notes.length > 0 ? true : false
 
 // about positions
 let screenOrigin
 let screenWidth
 let screenHeight
-let notePosX
-let notePosY
 
 // about updates
 let isUpdating = false
@@ -169,7 +171,6 @@ let isUpdating = false
 app.setName(name)
 app.setAppUserModelId(info.displayAppID)
 app.setJumpList([]) // empty app jumplist
-//!app.disableHardwareAcceleration()
 
 if (!isDev) {
     app.setLoginItemSettings({
@@ -288,6 +289,14 @@ if (!instanceLock) {
                         type: "checkbox",
                         checked: data.showAlerts,
                         click: () => toggleShowAlerts()
+                    },
+
+                    {   // choose if show messages
+                        label: "Show messages",
+                        id: "showMessagesID",
+                        type: "checkbox",
+                        checked: data.showMessages,
+                        click: () => toggleShowMessages()
                     },
 
                     {   // choose if run on startup
@@ -422,9 +431,7 @@ if (!instanceLock) {
                 if (!arePinned) {
                     pinAllNotes()
 
-                } else {
-                    unpinAllNotes()
-                }
+                } else unpinAllNotes()
             }
         })
 
@@ -446,7 +453,6 @@ if (!instanceLock) {
 
             // show launch notification
             if (Notification.isSupported()) {
-
                 lauchNotif.show()
 
                 lauchNotif.on("close", () => lauchNotif.close())
@@ -456,7 +462,7 @@ if (!instanceLock) {
 
 
         // restore unclosed notes
-        if (data.notes.length != 0) {
+        if (data.notes.length > 0) {
 
             // load and show restored notes
             data.notes.forEach(noteToRestore => {
@@ -477,18 +483,20 @@ if (!instanceLock) {
                 // execute when ready
                 noteToRestore.on("ready-to-show", () => {
 
+                    // IPC: send "showMessages" event
+                    noteToRestore.webContents.send("showMessages", data.showMessages)
+
                     // IPC: send "displayNote" event
                     noteToRestore.webContents.send("displayNote", {
                         id: updatedID,
                         text: restoredText,
                         colorIndex: restoredColor,
-                        message: false
+                        dragMessage: false
                     })
 
-                    noteToRestore.show()
+                    showSmoothly(noteToRestore)
 
                     const noteIndex = data.notes.findIndex(n => n.id === restoredID)
-
                     data.notes[noteIndex].id = updatedID
 
                     updateDataFile()
@@ -520,7 +528,6 @@ if (!instanceLock) {
         }
     })
 
-
     // execute before app quit
     app.on("before-quit", () => {
 
@@ -536,7 +543,6 @@ if (!instanceLock) {
 
         globalShortcut.unregisterAll() // unregister all shortcuts
     })
-
 
     // execute when all windows are closed/destroyed
     app.on("window-all-closed", () => {
@@ -555,7 +561,6 @@ if (!instanceLock) {
 
                 // show alert notification
                 if (Notification.isSupported()) {
-
                     quitPreventNotif.show()
 
                     quitPreventNotif.on("close", () => quitPreventNotif.close())
@@ -566,7 +571,6 @@ if (!instanceLock) {
             showInputWindow() // reload and show input
         }
     })
-
 
 
     // FUNCTION: build input
@@ -592,9 +596,9 @@ if (!instanceLock) {
             resizable: false,
             focusable: true,
 
+            skipTaskbar: false,
             alwaysOnTop: true,
             show: false,
-            skipTaskbar: false,
 
             webPreferences: {
                 nodeIntegration: true,
@@ -605,7 +609,6 @@ if (!instanceLock) {
 
         return inputWindow
     }
-
 
     // FUNCTION: build note
     function buildNoteWindow() {
@@ -629,9 +632,9 @@ if (!instanceLock) {
             resizable: false,
             focusable: true,
 
+            skipTaskbar: true,
             alwaysOnTop: false,
             show: false,
-            skipTaskbar: true,
 
             webPreferences: {
                 nodeIntegration: true,
@@ -641,7 +644,6 @@ if (!instanceLock) {
 
         return noteWindow
     }
-
 
     // FUNCTION: build help
     function buildHelpWindow() {
@@ -666,9 +668,9 @@ if (!instanceLock) {
             resizable: false,
             focusable: true,
 
+            skipTaskbar: false,
             alwaysOnTop: true,
             show: false,
-            skipTaskbar: false,
 
             webPreferences: {
                 nodeIntegration: true,
@@ -679,14 +681,12 @@ if (!instanceLock) {
         return helpWindow
     }
 
-
     // FUNCTION: load input
     function loadInputWindow() {
 
         inputWin = buildInputWindow()
         inputWin.loadFile("src/input/input.html")
         inputWin.setAppDetails({ appId: "input.win" })
-
 
         // register shortcuts only when visible
         inputWin.on("show", () => {
@@ -723,7 +723,7 @@ if (!instanceLock) {
 
         // close input when not focused
         inputWin.on("blur", () => {
-            inputWin.hide()
+            hideSmoothly(inputWin)
         })
 
         // popup input menu
@@ -739,33 +739,35 @@ if (!instanceLock) {
         })
     }
 
-
     // FUNCTION: show input
     function showInputWindow() {
 
         if (!inputWin || inputWin.isDestroyed()) {
 
-            // reload input if destroyed
-            loadInputWindow()
+            loadInputWindow() // reload input if destroyed
 
             inputWin.on("ready-to-show", () => {
                 inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
-                inputWin.show()
+                inputWin.webContents.send("showMessages", data.showMessages)  // IPC: send "showMessages" event
+                showSmoothly(inputWin)
             })
 
         } else {
 
             if (!inputWin.isVisible()) {
                 inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
-                inputWin.show()
+                inputWin.webContents.send("showMessages", data.showMessages)  // IPC: send "showMessages" event
+                showSmoothly(inputWin)
 
             } else {
-                inputWin.hide()
-                inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
+                hideSmoothly(inputWin)
+
+                setTimeout(() => {
+                    inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
+                }, 1000)
             }
         }
     }
-
 
     // FUNCTION: load and show help
     function showHelpWindow() {
@@ -777,7 +779,7 @@ if (!instanceLock) {
             helpWin.loadFile("src/help/help.html")
             helpWin.setAppDetails({ appId: "HELP.win" })
 
-            helpWin.on("ready-to-show", () => helpWin.show())
+            helpWin.on("ready-to-show", () => showSmoothly(helpWin))
 
             // register shortcut when visible/focused
             helpWin.on("show", () => {
@@ -811,17 +813,15 @@ if (!instanceLock) {
         } else helpWin.focus() // focus if already opened
     }
 
-
     // FUNCTION: move all notes on top
     function showAllNotes() {
 
         data.notes.forEach(note => {
 
             const noteFromId = BrowserWindow.fromId(note.id + 1)
-            noteFromId.show()
+            noteFromId.moveTop()
         })
     }
-
 
     // FUNCTION: pin all notes
     function pinAllNotes() {
@@ -843,7 +843,6 @@ if (!instanceLock) {
         trayMenu.getMenuItemById("showNotesID").enabled = false
     }
 
-
     // FUNCTION: unpin all notes
     function unpinAllNotes() {
 
@@ -863,7 +862,6 @@ if (!instanceLock) {
         trayMenu.getMenuItemById("pinNotesID").visible = true
         trayMenu.getMenuItemById("showNotesID").enabled = true
     }
-
 
 
     // FUNCTION: check for updates automatically (on startup)
@@ -909,7 +907,6 @@ if (!instanceLock) {
 
                     // show update-alert notification
                     if (Notification.isSupported()) {
-
                         updateHelpNotif.show()
 
                         updateHelpNotif.on("close", () => updateHelpNotif.close())
@@ -925,7 +922,6 @@ if (!instanceLock) {
             dialog.showErrorBox(`${appName} UPDATER ERROR`, error)
         })
     }
-
 
     // FUNCTION: check for updates manually (from tray menu)
     function checkForUpdatesFromMenu() {
@@ -947,7 +943,6 @@ if (!instanceLock) {
 
                 // show no-update notification
                 if (Notification.isSupported()) {
-
                     noUpdateNotif.show()
 
                     noUpdateNotif.on("close", () => noUpdateNotif.close())
@@ -956,7 +951,6 @@ if (!instanceLock) {
             }
         })
     }
-
 
     // FUNCTION: install update immediately
     function installUpdate() {
@@ -971,7 +965,6 @@ if (!instanceLock) {
         autoUpdater.quitAndInstall() // quit and install update
     }
 
-
     // FUNCTION: choose if show notifications
     function toggleShowAlerts() {
 
@@ -982,12 +975,26 @@ if (!instanceLock) {
         updateDataFile()
     }
 
+    // FUNCTION: choose if show messages
+    function toggleShowMessages() {
+
+        checkDataFile()
+
+        data.showMessages = data.showMessages ? false : true
+
+        updateDataFile()
+
+        // IPC: send "showMessages" event to all opened windows
+        BrowserWindow.getAllWindows().forEach(win => {
+            win.webContents.send("showMessages", data.showMessages)
+        })
+    }
 
     // FUNCTION: choose if run on startup
     function toggleAutoLaunch() {
 
         checkDataFile()
-        
+
         data.autoLaunch = data.autoLaunch ? false : true
 
         // set auto-launch value
@@ -998,7 +1005,6 @@ if (!instanceLock) {
 
         updateDataFile()
     }
-    
 
     // FUNCTION: delete all notes
     function clearAllNotes() {
@@ -1019,11 +1025,11 @@ if (!instanceLock) {
                 data.notes.forEach(note => {
 
                     const noteFromId = BrowserWindow.fromId(note.id + 1)
-
-                    if (noteFromId) noteFromId.close()
+                    if (noteFromId) closeSmoothly(noteFromId)
                 })
 
                 arePinned = false
+                someNotes = data.notes.length > 0 ? true : false
 
                 checkDataFile()
 
@@ -1044,10 +1050,8 @@ if (!instanceLock) {
         })
     }
 
-
     // FUNCTION: save last color index
     function saveLastColor(index) {
-
         colorIndex = index
         inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
 
@@ -1057,7 +1061,6 @@ if (!instanceLock) {
 
         updateDataFile()
     }
-
 
     // FUNCTION: manage note events
     function noteEvents(win) {
@@ -1103,7 +1106,76 @@ if (!instanceLock) {
         })
     }
 
+    // FUNCTION: gradually show window
+    function showSmoothly(win) {
 
+        win.setOpacity(0)
+        win.show()
+
+        let opacity = 0
+
+        const interval = setInterval(() => {
+
+            if (opacity < 1) {
+                opacity += 0.5
+                win.setOpacity(opacity)
+
+            } else clearInterval(interval)
+
+        }, 5)
+    }
+
+    // FUNCTION: gradually hide window
+    function hideSmoothly(win) {
+
+        win.setOpacity(1)
+
+        let opacity = 1
+
+        const interval = setInterval(() => {
+
+            if (opacity > 0) {
+                opacity -= 0.1
+                win.setOpacity(opacity)
+
+            } else {
+                clearInterval(interval)
+                win.hide()
+            }
+
+        }, 5)
+    }
+
+    // FUNCTION: gradually close window
+    function closeSmoothly(win) {
+
+        win.setOpacity(1)
+
+        let opacity = 1
+
+        const interval = setInterval(() => {
+
+            if (opacity > 0) {
+                opacity -= 0.1
+                win.setOpacity(opacity)
+
+            } else {
+                clearInterval(interval)
+                win.close()
+            }
+
+        }, 5)
+    }
+
+
+    // IPC: hide and clear input
+    ipcMain.on("hideInput", () => {
+        hideSmoothly(inputWin)
+
+        setTimeout(() => {
+            inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
+        }, 1000)
+    })
 
     // IPC: create note
     ipcMain.on("createNote", (e, noteText) => {
@@ -1125,17 +1197,20 @@ if (!instanceLock) {
             // execute when ready
             noteWin.on("ready-to-show", () => {
 
+                // IPC: send "showMessages" event
+                noteWin.webContents.send("showMessages", data.showMessages)
+
                 // IPC: send "displayNote" event
                 noteWin.webContents.send("displayNote", {   // only notes IDs
                     id: noteWin.id - 1,
                     text: noteText,
                     colorIndex: colorIndex,
-                    message: true
+                    dragMessage: true
                 })
 
-                noteWin.show()
+                showSmoothly(noteWin)
 
-                // check and pin (if notes are pinned)
+                // pin if already pinned
                 if (arePinned) {
                     noteWin.webContents.send("pinNote") // IPC: send "pinNote" event
                     noteWin.setAlwaysOnTop(true, "status")
@@ -1157,19 +1232,22 @@ if (!instanceLock) {
 
                 updateDataFile()
 
+                someNotes = data.notes.length > 0 ? true : false
+
                 // update tray
                 tray.setToolTip(`${appName} (${data.notes.length})`)
 
-                showAllNotes() // move all notes on top
+                // hide and clear input after 1s
+                hideSmoothly(inputWin)
 
-                // hide input after 100ms (prevent input hiding first)
                 setTimeout(() => {
-                    inputWin.hide()
-                }, 100);
+                    inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
+                }, 1000)
+
+                showAllNotes() // move all notes on top
             })
 
-            // manage note events
-            noteEvents(noteWin)
+            noteEvents(noteWin) // manage note events
 
             // update tray menu
             trayMenu.getMenuItemById("showNotesID").enabled = true
@@ -1178,20 +1256,11 @@ if (!instanceLock) {
         }
     })
 
-
-    // IPC: hide and clear input
-    ipcMain.on("hideInput", () => {
-        inputWin.hide()
-        inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
-    })
-
-
     // IPC: delete note
     ipcMain.on("deleteNote", (e, noteID) => {   // id -1
 
         const noteFromId = BrowserWindow.fromId(noteID + 1)
-
-        if (noteFromId) noteFromId.close()
+        if (noteFromId) closeSmoothly(noteFromId)
 
         const noteIndex = data.notes.findIndex(n => n.id === noteID + 1 - 1) // arrays start from 0!
 
@@ -1204,11 +1273,12 @@ if (!instanceLock) {
             updateDataFile()
         }
 
+        someNotes = data.notes.length > 0 ? true : false
+
         // update tray
-        tray.setToolTip(`${appName}${data.notes.length != 0 ? ` (${data.notes.length})` : ""}`)
+        tray.setToolTip(`${appName}${data.notes.length > 0 ? ` (${data.notes.length})` : ""}`)
 
         if (data.notes.length == 0) {
-
             arePinned = false
 
             // update tray menu
@@ -1220,12 +1290,10 @@ if (!instanceLock) {
         }
     })
 
-
-    // IPC: close HELPWINDOW
+    // IPC: close help window
     ipcMain.on("closeHelp", () => {
-        helpWin.close()
+        closeSmoothly(helpWin)
     })
-
 
     // IPC: open link in default browser
     ipcMain.on("openLink", (e, data) => {
@@ -1233,7 +1301,6 @@ if (!instanceLock) {
         const noteFromId = BrowserWindow.fromId(data.id + 1)
 
         noteFromId.webContents.setWindowOpenHandler(details => {
-
             shell.openExternal(details.url)
 
             return { action: "deny" }
@@ -1242,12 +1309,10 @@ if (!instanceLock) {
         shell.openExternal(data.url) // open link
     })
 
-
     // IPC: open example link in default browser
     ipcMain.on("openExampleLink", () => {
 
         helpWin.webContents.setWindowOpenHandler(details => {
-
             shell.openExternal(details.url)
 
             return { action: "deny" }
