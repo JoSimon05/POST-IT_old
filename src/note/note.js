@@ -10,8 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const cornerBox = document.getElementById("corner-box")
     const corner = document.getElementById("corner")
     const message = document.getElementById("message-field")
+
     let noteID
     let timeoutID
+    let canShowMessages
 
     let linkFromText
     let linkToOpen
@@ -40,14 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // IPC: display note content
     ipcRenderer.on("displayNote", (e, data) => {
 
-        noteID = data.id   // id -1
         const textFromData = data.text
+        noteID = data.id   // id -1
 
         linkFromText = linkify.find(textFromData)
         isLink = linkFromText.length != 0 ? true : false
         linkToOpen = isLink ? linkFromText[0].value : null // only one link!
         isValidLink = linkToOpen != null ? linkToOpen.startsWith("https://") || linkToOpen.startsWith("http://") : null
-
 
         if (isValidLink) {
 
@@ -59,17 +60,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // mouse events (link)
             linkText.addEventListener("mouseenter", () => {
-                message.innerText = "Open link..."
+
+                if (canShowMessages) message.innerText = "Open link..."
+
                 linkText.style.color = "rgba(0, 0, 0, 0.5)"
             })
 
             linkText.addEventListener("mouseleave", () => {
 
-                if (message.innerText == "Open link..." || message.innerText == "") {
-                    message.innerText = ""
+                if (canShowMessages) {
 
-                } else {
+                    if (message.innerText == "Open link..." || message.innerText == "") {
+                        message.innerText = ""
 
+                    } else {
+
+                        message.innerText = "Copied!"
+
+                        // overwrite current timeout
+                        if (timeoutID) clearTimeout(timeoutID)
+
+                        timeoutID = setTimeout(() => {
+
+                            if (message.innerText == "Open link..." || message.innerText == "Delete...") {
+                                clearTimeout(timeoutID)
+
+                            } else message.innerText = ""
+
+                        }, 3000)
+                    }
+                }
+
+                linkText.style.color = "rgba(0, 0, 0, 1)"
+            })
+
+            linkText.addEventListener("mousedown", () => {
+                if (canShowMessages) message.innerText = ""
+            })
+
+            linkText.addEventListener("click", () => {
+                ipcRenderer.send("openLink", { url: linkToOpen, id: noteID }) // IPC: send "openLink" event
+            })
+
+            linkText.addEventListener("contextmenu", (e) => {
+                e.preventDefault()
+
+                // copy link
+                clipboard.writeText(linkToOpen)
+
+                if (canShowMessages) {
                     message.innerText = "Copied!"
 
                     // overwrite current timeout
@@ -84,36 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     }, 3000)
                 }
-
-                linkText.style.color = "rgba(0, 0, 0, 1)"
-            })
-
-            linkText.addEventListener("mousedown", () => {
-                message.innerText = ""
-            })
-
-            linkText.addEventListener("click", () => {
-                ipcRenderer.send("openLink", { url: linkToOpen, id: noteID }) // IPC: send "openLink" event
-            })
-
-            linkText.addEventListener("contextmenu", (e) => {
-                e.preventDefault()
-
-                // copy link
-                clipboard.writeText(linkToOpen)
-                message.innerText = "Copied!"
-
-                // overwrite current timeout
-                if (timeoutID) clearTimeout(timeoutID)
-
-                timeoutID = setTimeout(() => {
-
-                    if (message.innerText == "Open link..." || message.innerText == "Delete...") {
-                        clearTimeout(timeoutID)
-
-                    } else message.innerText = ""
-
-                }, 3000)
             })
 
             linkText.style.cursor = "pointer"
@@ -129,15 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
         corner.style.background = `linear-gradient(-45deg, transparent 50%, rgba(${secColorsArray[data.colorIndex]}, 1) 50%)`
 
         // show drag message
-        if (data.message) message.innerText = "Drag it!"
+        if (canShowMessages && data.dragMessage) message.innerText = "Drag it!"
     })
-
 
 
     // mouse events (text - no link)
     noteText.addEventListener("mouseenter", () => {
         if (!isValidLink) {
-            message.innerText = "Copy..."
+
+            if (canShowMessages) message.innerText = "Copy..."
+
             noteText.style.color = "rgba(0, 0, 0, 0.5)"
         }
     })
@@ -146,11 +156,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!isValidLink) {
 
-            if (message.innerText == "Copy..." || message.innerText == "") {
-                message.innerText = ""
+            if (canShowMessages) {
 
-            } else {
+                if (message.innerText == "Copy..." || message.innerText == "") {
+                    message.innerText = ""
 
+                } else {
+
+                    message.innerText = "Copied!"
+
+                    // overwrite current timeout
+                    if (timeoutID) clearTimeout(timeoutID)
+
+                    timeoutID = setTimeout(() => {
+
+                        if (message.innerText == "Copy..." || message.innerText == "Delete...") {
+                            clearTimeout(timeoutID)
+
+                        } else message.innerText = ""
+
+                    }, 3000)
+                }
+            }
+
+            noteText.style.color = "rgba(0, 0, 0, 1)"
+        }
+    })
+
+    noteText.addEventListener("mousedown", () => {
+
+        if (!isValidLink) {
+
+            if (canShowMessages) message.innerText = ""
+        }
+    })
+
+    noteText.addEventListener("click", () => {
+
+        if (!isValidLink) {
+
+            // copy text
+            clipboard.writeText(noteText.textContent)
+
+            if (canShowMessages) {
                 message.innerText = "Copied!"
 
                 // overwrite current timeout
@@ -165,48 +213,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }, 3000)
             }
-
-            noteText.style.color = "rgba(0, 0, 0, 1)"
-        }
-    })
-
-    noteText.addEventListener("mousedown", () => {
-
-        if (!isValidLink) {
-            message.innerText = ""
-        }
-    })
-    
-    noteText.addEventListener("click", () => {
-
-        if (!isValidLink) {
-
-            // copy text
-            clipboard.writeText(noteText.textContent)
-            message.innerText = "Copied!"
-
-            // overwrite current timeout
-            if (timeoutID) clearTimeout(timeoutID)
-
-            timeoutID = setTimeout(() => {
-
-                if (message.innerText == "Copy..." || message.innerText == "Delete...") {
-                    clearTimeout(timeoutID)
-
-                } else message.innerText = ""
-
-            }, 3000)
         }
     })
 
 
     // mouse events (corner - no link)
     cornerContainer.addEventListener("mouseenter", () => {
-        message.innerText = "Delete..."
+        if (canShowMessages) message.innerText = "Delete..."
     })
 
     cornerContainer.addEventListener("mouseleave", () => {
-        message.innerText = ""
+        if (canShowMessages) message.innerText = ""
     })
 
     cornerContainer.addEventListener("click", () => {
@@ -214,21 +231,24 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
 
-
     // IPC: pin note
     ipcRenderer.on("pinNote", () => {
         pinText.innerText = "Pinned!"
     })
-
 
     // IPC: unpin note
     ipcRenderer.on("unpinNote", () => {
         pinText.innerText = ""
     })
 
-
     // IPC: hide drag message
     ipcRenderer.on("hideDragMessage", () => {
+        if (canShowMessages) message.innerText = ""
+    })
+
+    // IPC: set messages display
+    ipcRenderer.on("showMessages", (e, showMessages) => {
+        canShowMessages = showMessages
         message.innerText = ""
     })
 })

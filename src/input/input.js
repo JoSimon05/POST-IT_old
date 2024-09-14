@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let lastText = null
     let timeoutID
+    let canShowMessages
 
     const defaultPlaceholder = "Type something or paste a link..."
     const defaultMessage = "Text input"
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // never lose focus on input
     textField.addEventListener("blur", () => textField.focus())
 
-
     // execute on any input
     textField.addEventListener("input", () => {
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         textField.style.height = `${textField.scrollHeight + 2}px`
 
         // show pin message
-        if (textField.value.length > 0) {
+        if (canShowMessages && textField.value.length > 0) {
             message.innerText = '"Enter" to pin'
 
         } else message.innerText = defaultMessage
@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
-
     // execute when KEY is pressed
     textField.addEventListener("keydown", e => {
 
@@ -116,14 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // IPC: send "createNote" event
                     ipcRenderer.send("createNote", textField.value)
-                    
-                    // clear input after 100ms (prevent visual glitch)
-                    setTimeout(() => {
-                        textField.value = ""
-                        textField.style.height = "50px"
-                        message.innerText = defaultMessage
-
-                    }, 100)
                 }
             }
         }
@@ -135,14 +126,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
 
-
     // IPC: clear input
     ipcRenderer.on("clearInput", () => {
         textField.value = ""
         textField.style.height = "50px"
         message.innerText = defaultMessage
     })
-
 
     // IPC: prevent if too many notes
     ipcRenderer.on("tooManyNotes", (e, noteText) => {
@@ -178,10 +167,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1000)
     })
 
-
     // IPC: change input color
     ipcRenderer.on("displayColor", (e, colorIndex) => {
         document.body.style.background = `linear-gradient(-45deg, transparent 12.5%, rgba(${colorsArray[colorIndex]}, 1) 0%)`
         fakeCorner.style.background = `linear-gradient(-45deg, transparent 50%, rgba(${secColorsArray[colorIndex]}, 1) 50%)`
+    })
+
+    // IPC: set messages display
+    ipcRenderer.on("showMessages", (e, showMessages) => {
+        canShowMessages = showMessages
+        message.innerText = defaultMessage
     })
 })
