@@ -18,7 +18,7 @@
 
 ## DEMO
 
-![demo]()
+![demo](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/demo.gif)
 
 <br>
 
