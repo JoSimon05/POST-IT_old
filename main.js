@@ -868,10 +868,13 @@ if (!instanceLock) {
     function checkForUpdatesOnStartup() {
 
         // updater setup
-        autoUpdater.autoDownload = true
+        autoUpdater.autoDownload = false
         autoUpdater.autoInstallOnAppQuit = false
 
-        autoUpdater.checkForUpdates() // check for updates
+        // download update when available
+        autoUpdater.on("update-available", () => {
+            autoUpdater.downloadUpdate()
+        })
 
         // show notification when update is downloaded
         autoUpdater.on("update-downloaded", (info) => {
@@ -921,12 +924,12 @@ if (!instanceLock) {
         autoUpdater.on("error", (error) => {
             dialog.showErrorBox(`${appName} UPDATER ERROR`, error)
         })
+        
+        autoUpdater.checkForUpdates() // check for updates
     }
 
     // FUNCTION: check for updates manually (from tray menu)
     function checkForUpdatesFromMenu() {
-
-        autoUpdater.checkForUpdates() // check for updates
 
         // show notification if no update is available
         autoUpdater.on("update-not-available", () => {
@@ -950,6 +953,8 @@ if (!instanceLock) {
                 }
             }
         })
+        
+        autoUpdater.checkForUpdates() // check for updates
     }
 
     // FUNCTION: install update immediately
