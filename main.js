@@ -818,8 +818,8 @@ if (!instanceLock) {
 
         data.notes.forEach(note => {
 
-            const noteFromId = BrowserWindow.fromId(note.id + 1)
-            noteFromId.moveTop()
+            const noteFromID = BrowserWindow.fromId(note.id + 1)
+            noteFromID.focus()
         })
     }
 
@@ -828,11 +828,11 @@ if (!instanceLock) {
 
         data.notes.forEach(note => {
 
-            const noteFromId = BrowserWindow.fromId(note.id + 1)
+            const noteFromID = BrowserWindow.fromId(note.id + 1)
 
-            noteFromId.webContents.send("pinNote") // IPC: send "pinNote" event
-            noteFromId.setAlwaysOnTop(true, "status")
-            noteFromId.focus()
+            noteFromID.webContents.send("pinNote") // IPC: send "pinNote" event
+            noteFromID.setAlwaysOnTop(true, "status")
+            noteFromID.focus()
         })
 
         arePinned = true
@@ -848,11 +848,11 @@ if (!instanceLock) {
 
         data.notes.forEach(note => {
 
-            const noteFromId = BrowserWindow.fromId(note.id + 1)
+            const noteFromID = BrowserWindow.fromId(note.id + 1)
 
-            noteFromId.webContents.send("unpinNote") // IPC: send "unpinNote" event
-            noteFromId.setAlwaysOnTop(false)
-            noteFromId.focus()
+            noteFromID.webContents.send("unpinNote") // IPC: send "unpinNote" event
+            noteFromID.setAlwaysOnTop(false)
+            noteFromID.focus()
         })
 
         arePinned = false
@@ -1024,8 +1024,8 @@ if (!instanceLock) {
 
                 data.notes.forEach(note => {
 
-                    const noteFromId = BrowserWindow.fromId(note.id + 1)
-                    if (noteFromId) closeSmoothly(noteFromId)
+                    const noteFromID = BrowserWindow.fromId(note.id + 1)
+                    if (noteFromID) closeSmoothly(noteFromID)
                 })
 
                 arePinned = false
@@ -1070,10 +1070,10 @@ if (!instanceLock) {
 
             data.notes.forEach(note => {
 
-                const noteFromId = BrowserWindow.fromId(note.id + 1)
-                const [updatedPosX, updatedPosY] = noteFromId.getPosition()
+                const noteFromID = BrowserWindow.fromId(note.id + 1)
+                const [updatedPosX, updatedPosY] = noteFromID.getPosition()
 
-                if (noteFromId) {
+                if (noteFromID) {
 
                     const noteIndex = data.notes.findIndex(n => n.id === note.id)
 
@@ -1098,10 +1098,10 @@ if (!instanceLock) {
 
             data.notes.forEach(note => {
 
-                const noteFromId = BrowserWindow.fromId(note.id + 1)
+                const noteFromID = BrowserWindow.fromId(note.id + 1)
 
-                noteFromId.setEnabled(false)
-                noteFromId.setEnabled(true)
+                noteFromID.setEnabled(false)
+                noteFromID.setEnabled(true)
             })
         })
     }
@@ -1259,8 +1259,8 @@ if (!instanceLock) {
     // IPC: delete note
     ipcMain.on("deleteNote", (e, noteID) => {   // id -1
 
-        const noteFromId = BrowserWindow.fromId(noteID + 1)
-        if (noteFromId) closeSmoothly(noteFromId)
+        const noteFromID = BrowserWindow.fromId(noteID + 1)
+        if (noteFromID) closeSmoothly(noteFromID)
 
         const noteIndex = data.notes.findIndex(n => n.id === noteID + 1 - 1) // arrays start from 0!
 
@@ -1298,9 +1298,9 @@ if (!instanceLock) {
     // IPC: open link in default browser
     ipcMain.on("openLink", (e, data) => {
 
-        const noteFromId = BrowserWindow.fromId(data.id + 1)
+        const noteFromID = BrowserWindow.fromId(data.id + 1)
 
-        noteFromId.webContents.setWindowOpenHandler(details => {
+        noteFromID.webContents.setWindowOpenHandler(details => {
             shell.openExternal(details.url)
 
             return { action: "deny" }
