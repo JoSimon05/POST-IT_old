@@ -877,7 +877,7 @@ if (!instanceLock) {
         })
 
         // show notification when update is downloaded
-        autoUpdater.on("update-downloaded", (info) => {
+        autoUpdater.on("update-downloaded", (updateInfo) => {
 
             // update tray
             tray.setImage(updateIconLow)
