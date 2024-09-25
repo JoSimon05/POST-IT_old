@@ -1,5 +1,6 @@
 
 .database/
 node_modules/
+.gitignore
 package-lock.json
 TODO
