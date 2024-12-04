@@ -150,6 +150,7 @@ const trayMenuShortcut = "SHIFT+ALT+N"
 let inputWin
 let noteWin
 let helpWin
+let canShowInput = true
 
 // about menus
 let tray
@@ -410,7 +411,16 @@ if (!instanceLock) {
 
         // SHORTCUT: show/hide input
         globalShortcut.register(inputShoutcut, () => {
-            showInputWindow()
+
+            if (canShowInput) {
+                canShowInput = false
+
+                showInputWindow()
+
+                setTimeout(() => {
+                    canShowInput = true
+                }, 500)
+            }
         })
 
         // SHORTCUT: show help
@@ -764,7 +774,7 @@ if (!instanceLock) {
 
                 setTimeout(() => {
                     inputWin.webContents.send("clearInput") // IPC: send "clearInput" event
-                }, 1000)
+                }, 500)
             }
         }
     }
@@ -891,10 +901,10 @@ if (!instanceLock) {
             dialog.showMessageBox({
                 icon: updateIconHigh,
                 message: `New update available!   ( ${info.displayVersion} )  ->  ( v${updateInfo.version} )`,
-                buttons: ["Install", "Not now"],
                 noLink: true,
-                defaultId: 0,
-                cancelId: 1
+                buttons: ["Install", "Not now"],
+                cancelId: 1,
+                defaultId: 0
 
             }).then(message => {
 
@@ -1018,10 +1028,10 @@ if (!instanceLock) {
         dialog.showMessageBox({
             icon: clearIcon,
             message: "Do you want to delete all Notes on your desktop?",
-            buttons: ["Yes", "No"],
             noLink: true,
-            defaultId: 1,
-            cancelId: 1
+            buttons: ["Yes", "No"],
+            cancelId: 1,
+            defaultId: 1
 
         }).then(message => {
 
@@ -1096,6 +1106,9 @@ if (!instanceLock) {
         win.on("will-move", () => {
             win.webContents.send("hideDragMessage") // IPC: send "hideDragMessage" event
         })
+
+        // prevent note window from closing
+        win.on("close", (e) => e.preventDefault())
 
         // prevent note system menu
         const WM_INITMENU = 0x0116;

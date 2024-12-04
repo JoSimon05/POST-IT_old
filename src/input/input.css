@@ -93,6 +93,8 @@ body {
     font-weight: 500;
     color: rgba(50, 50, 50, 1);
     text-align: center;
+
+    user-select: none;
 }
 
 

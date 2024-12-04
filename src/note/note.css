@@ -103,7 +103,7 @@ body {
     left: calc(100% - 45px);
     top: calc(100% - 45px);
 
-    transition: width 0.085s ease, height 0.085s ease;
+    transition: width 85ms ease, height 85ms ease;
 }
 
 #corner {
@@ -114,7 +114,7 @@ body {
     right: 0;
     bottom: 0;
 
-    transition: width 0.100s ease, height 0.100s ease;
+    transition: width 100ms ease, height 100ms ease;
 }
 
 #corner-container:hover #corner-box {

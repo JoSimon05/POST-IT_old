@@ -11,15 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const corner = document.getElementById("corner")
     const message = document.getElementById("message-field")
 
-    let noteID
-    let timeoutID
-    let canShowMessages
-
-    let linkFromText
-    let linkToOpen
-    let isLink
-    let isValidLink
-
     const colorsArray = [
         "255, 193, 74",   // orange
         "255, 255, 100",   // yellow
@@ -37,6 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "176, 99, 225",   // darker violet (-30)
         "225, 117, 187"   // darker pink (-30)
     ]
+
+    let noteID
+    let timeoutID
+    let canShowMessages
+
+    let linkFromText
+    let linkToOpen
+    let isLink
+    let isValidLink
 
 
     // IPC: display note content

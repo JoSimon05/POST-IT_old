@@ -115,7 +115,7 @@ li {
 
     background: linear-gradient(-45deg, transparent 50%, white 50%);
 
-    transition: width 0.1s ease, height 0.1s ease;
+    transition: width 100ms ease, height 100ms ease;
 }
 
 #corner {
@@ -128,7 +128,7 @@ li {
 
     background: linear-gradient(-45deg, transparent 50%, rgb(225, 225, 225, 1) 50%);
 
-    transition: width 0.1s ease, height 0.1s ease;
+    transition: width 100ms ease, height 100ms ease;
 }
 
 #corner-container:hover #corner-box {

@@ -8,10 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = document.getElementById("message-field")
     const fakeCorner = document.getElementById("fake-corner")
 
-    let lastText = null
-    let timeoutID
-    let canShowMessages
-
     const defaultPlaceholder = "Type something or paste a link..."
     const defaultMessage = "Text input"
 
@@ -33,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "225, 117, 187"   // darker pink (-30)
     ]
 
+    let lastText = null
+    let timeoutID
+    let canShowMessages
+
 
     // never lose focus on input
     textField.addEventListener("blur", () => textField.focus())
@@ -46,9 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // show pin message
         if (canShowMessages && textField.value.length > 0) {
-            message.innerText = '"Enter" to pin'
+            message.innerHTML = "<u>Click to pin</u>"
 
-        } else message.innerText = defaultMessage
+        } else {
+            message.innerText = defaultMessage
+
+            message.style.color = "rgba(0, 0, 0, 1)"
+            message.style.cursor = "auto"
+        }
 
         // show max characters message
         if (textField.value.length > 50) {
@@ -99,30 +104,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "Enter") {
             e.preventDefault()
 
-            // hide input if empty
-            if (textField.value == "" && lastText == null) {
-                ipcRenderer.send("hideInput") // IPC: send "hideInput" event
-
-            } else {
-
-                // prevent if blank/spaced text
-                if (!/\S/.test(textField.value)) {
-                    textField.value = ""
-                    textField.style.height = "50px"
-                    message.innerText = defaultMessage
-
-                } else {
-
-                    // IPC: send "createNote" event
-                    ipcRenderer.send("createNote", textField.value)
-                }
-            }
+            confirmText()
         }
 
         // execute if KEY is "ESC"
         if (e.key === "Escape") {
             ipcRenderer.send("hideInput") // IPC: send "hideInput" event
         }
+    })
+
+
+    // input message events
+    message.addEventListener("mouseenter", () => {
+
+        if (message.textContent.includes("pin")) {
+            message.style.color = "rgba(0, 0, 0, 0.5)"
+            message.style.cursor = "pointer"
+        }
+    })
+
+    message.addEventListener("mouseleave", () => {
+        message.style.color = "rgba(0, 0, 0, 1)"
+        message.style.cursor = "auto"
+    })
+
+    message.addEventListener("click", () => {
+        confirmText()
     })
 
 
@@ -178,4 +185,28 @@ document.addEventListener("DOMContentLoaded", () => {
         canShowMessages = showMessages
         message.innerText = defaultMessage
     })
+
+
+    // FUNCTION: send text to pin
+    function confirmText() {
+
+        // hide input if empty
+        if (textField.value == "" && lastText == null) {
+            ipcRenderer.send("hideInput") // IPC: send "hideInput" event
+
+        } else {
+
+            // prevent if blank/spaced text
+            if (!/\S/.test(textField.value)) {
+                textField.value = ""
+                textField.style.height = "50px"
+                message.innerText = defaultMessage
+
+            } else {
+
+                // IPC: send "createNote" event
+                ipcRenderer.send("createNote", textField.value)
+            }
+        }
+    }
 })
