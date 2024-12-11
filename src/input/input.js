@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let lastText = null
     let timeoutID
-    let canShowMessages
 
 
     // never lose focus on input
@@ -40,12 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // execute on any input
     textField.addEventListener("input", () => {
 
-        message.innerText = defaultMessage
         textField.style.height = "1px"
         textField.style.height = `${textField.scrollHeight + 2}px`
 
         // show pin message
-        if (canShowMessages && textField.value.length > 0) {
+        if (textField.value.length > 0) {
             message.innerHTML = "<u>Click to pin</u>"
 
         } else {
@@ -180,12 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fakeCorner.style.background = `linear-gradient(-45deg, transparent 50%, rgba(${secColorsArray[colorIndex]}, 1) 50%)`
     })
 
-    // IPC: set messages display
-    ipcRenderer.on("showMessages", (e, showMessages) => {
-        canShowMessages = showMessages
-        message.innerText = defaultMessage
-    })
-
 
     // FUNCTION: send text to pin
     function confirmText() {
@@ -210,3 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 })
+
+function log(text) {
+    ipcRenderer.send("log", text)
+}

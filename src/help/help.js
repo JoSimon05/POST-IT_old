@@ -45,3 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ipcRenderer.send("closeHelp") // IPC: send "closeHelp" event
     })
 })
+
+function log(text) {
+    ipcRenderer.send("log", text)
+}

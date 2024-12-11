@@ -252,3 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
         message.innerText = ""
     })
 })
+
+function log(text) {
+    ipcRenderer.send("log", text)
+}

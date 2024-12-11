@@ -151,6 +151,7 @@ let inputWin
 let noteWin
 let helpWin
 let canShowInput = true
+let canClose
 
 // about menus
 let tray
@@ -540,6 +541,7 @@ if (!instanceLock) {
 
     // execute before app quit
     app.on("before-quit", () => {
+        canClose = true
 
         // check auto-launch value and update data file
         if (!isDev) {
@@ -758,7 +760,6 @@ if (!instanceLock) {
 
             inputWin.on("ready-to-show", () => {
                 inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
-                inputWin.webContents.send("showMessages", data.showMessages)  // IPC: send "showMessages" event
                 showSmoothly(inputWin)
             })
 
@@ -766,7 +767,6 @@ if (!instanceLock) {
 
             if (!inputWin.isVisible()) {
                 inputWin.webContents.send("displayColor", colorIndex) // IPC: send "displayColor" event
-                inputWin.webContents.send("showMessages", data.showMessages)  // IPC: send "showMessages" event
                 showSmoothly(inputWin)
 
             } else {
@@ -934,7 +934,7 @@ if (!instanceLock) {
         autoUpdater.on("error", (error) => {
             dialog.showErrorBox(`${appName} UPDATER ERROR`, error)
         })
-        
+
         autoUpdater.checkForUpdates() // check for updates
     }
 
@@ -963,7 +963,7 @@ if (!instanceLock) {
                 }
             }
         })
-        
+
         autoUpdater.checkForUpdates() // check for updates
     }
 
@@ -1108,7 +1108,9 @@ if (!instanceLock) {
         })
 
         // prevent note window from closing
-        win.on("close", (e) => e.preventDefault())
+        win.on("close", (e) => {
+            if (!canClose) e.preventDefault()
+        })
 
         // prevent note system menu
         const WM_INITMENU = 0x0116;
@@ -1338,4 +1340,13 @@ if (!instanceLock) {
 
         shell.openExternal("https://example.com") // open example link
     })
+}
+
+
+ipcMain.on("log", (e, text) => {
+    console.log(text)
+})
+
+function log(text) {
+    console.log(text)
 }
