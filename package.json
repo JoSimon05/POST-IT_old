@@ -1,11 +1,11 @@
 {
   "info": {
     "displayName": "POST-IT",
-    "displayVersion": "v1.5.0",
+    "displayVersion": "v1.5.1",
     "displayAppID": "POST-IT"
   },
   "name": "post-it",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Stick your Notes!",
   "author": "Jo",
   "license": "UNLICENSED",
