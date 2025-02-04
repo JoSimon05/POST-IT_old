@@ -30,19 +30,19 @@
 
   > Color menu can only be displayed when Input bar is opened
 
-<br> **ALT+V** &nbsp;&#10230;&nbsp; move all Notes above other opened windows
+<br> **ALT+SHIFT+V** &nbsp;&#10230;&nbsp; move all Notes above other opened windows
 
   > Notes may still be hidden if they lose focus
 
-<br> **ALT+P** &nbsp;&#10230;&nbsp; pin/unpin all Notes on the top (z-level) of your desktop
+<br> **ALT+SHIFT+P** &nbsp;&#10230;&nbsp; pin/unpin all Notes on the top (z-level) of your desktop
 
   > Every new Note will be pinned automatically if other Notes are
 
-<br> **ALT+H** &nbsp;&#10230;&nbsp; open Help window
+<br> **ALT+SHIFT+H** &nbsp;&#10230;&nbsp; open Help window
 
   > Help cannot be closed by pressing the shortcut again
 
-<br> **SHIFT+ALT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray-context-menu)
+<br> **ALT+SHIFT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray-context-menu)
 
 <br>
 
