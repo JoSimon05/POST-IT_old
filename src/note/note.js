@@ -39,6 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let isValidLink
 
 
+    // prevent window zoom
+    window.addEventListener("keydown", (e) => {
+
+        if (e.key === "*" || e.key === "-") e.preventDefault()
+    })
+
+
     // IPC: display note content
     ipcRenderer.on("displayNote", (e, data) => {
 

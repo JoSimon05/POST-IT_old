@@ -33,6 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let timeoutID
 
 
+    // prevent window zoom
+    window.addEventListener("keydown", (e) => {
+
+        if (e.key === "*" || e.key === "-") e.preventDefault()
+    })
+
+
     // never lose focus on input
     textField.addEventListener("blur", () => textField.focus())
 

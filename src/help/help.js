@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const corner = document.getElementById("corner-container")
 
 
+    // prevent window zoom
+    window.addEventListener("keydown", (e) => {
+
+        if (e.key === "*" || e.key === "-") e.preventDefault()
+    })
+
+
     // mouse events (text)
     copyExample.addEventListener("click", () => {
 

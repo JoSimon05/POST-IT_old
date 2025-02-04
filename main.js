@@ -141,10 +141,10 @@ const pinkIcon = nativeImage.createFromPath(path.join(__dirname, "icons", "color
 const inputShoutcut = "ALT+N"
 const inputMenuShortcut = "SHIFT+F10" // system default
 const inputColorShortcut = "ALT+C"
-const helpShortcut = "ALT+H"
-const showShortcut = "ALT+V"
-const pinShortcut = "ALT+P"
-const trayMenuShortcut = "SHIFT+ALT+N"
+const helpShortcut = "ALT+SHIFT+H"
+const showShortcut = "ALT+SHIFT+V"
+const pinShortcut = "ALT+SHIFT+P"
+const trayMenuShortcut = "ALT+SHIFT+N"
 
 // about windows
 let inputWin
