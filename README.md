@@ -19,6 +19,7 @@
 ## DEMO
 
 ![demo](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/demo.gif)
+> *Demo relative to v1.4.0*
 
 <br>
 
