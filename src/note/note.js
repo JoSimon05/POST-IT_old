@@ -2,7 +2,7 @@
 const { clipboard, ipcRenderer, webFrame } = require("electron")
 const linkify = require("linkifyjs")
 
-webFrame.setZoomFactor(1)
+webFrame.setZoomFactor(1) // keep zoom to 100%
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -14,21 +14,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const message = document.getElementById("message-field")
 
     const colorsArray = [
-        "255, 193, 74",   // orange
-        "255, 255, 100",   // yellow
-        "185, 235, 71",   // green
-        "138, 222, 255",   // blue
-        "206, 129, 255",   // violet
-        "255, 147, 217"   // pink
+        "255, 193, 74",     // orange
+        "255, 255, 100",    // yellow
+        "185, 235, 71",     // green
+        "138, 222, 255",    // blue
+        "206, 129, 255",    // violet
+        "255, 147, 217"     // pink
     ]
 
     const secColorsArray = [
-        "225, 163, 44",   // darker orange (-30)
-        "225, 225, 70",   // darker yellow (-30)
-        "155, 205, 41",   // darker green (-30)
-        "108, 192, 225",   // darker blue (-30)
-        "176, 99, 225",   // darker violet (-30)
-        "225, 117, 187"   // darker pink (-30)
+        "225, 163, 44",     // darker orange (-30)
+        "225, 225, 70",     // darker yellow (-30)
+        "155, 205, 41",     // darker green (-30)
+        "108, 192, 225",    // darker blue (-30)
+        "176, 99, 225",     // darker violet (-30)
+        "225, 117, 187"     // darker pink (-30)
     ]
 
     let noteID

@@ -1,7 +1,7 @@
 
 const { clipboard, ipcRenderer, webFrame } = require("electron")
 
-webFrame.setZoomFactor(1)
+webFrame.setZoomFactor(1) // keep zoom to 100%
 
 document.addEventListener("DOMContentLoaded", () => {
 

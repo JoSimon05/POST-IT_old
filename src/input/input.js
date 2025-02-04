@@ -2,7 +2,7 @@
 const { ipcRenderer, webFrame } = require("electron")
 const linkify = require("linkifyjs")
 
-webFrame.setZoomFactor(1)
+webFrame.setZoomFactor(1) // keep zoom to 100%
 
 document.addEventListener("DOMContentLoaded", () => {
 

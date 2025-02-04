@@ -222,6 +222,14 @@ if (!instanceLock) {
                 enabled: false,
             },
 
+            {   // install update
+                label: "Install update!",
+                id: "installUpdateID",
+                visible: false,
+                enabled: !isDev,
+                click: () => installUpdate()
+            },
+
             { type: "separator" },
 
             {   // show input
@@ -275,14 +283,6 @@ if (!instanceLock) {
                         visible: true,
                         enabled: !isDev,
                         click: () => checkForUpdatesFromMenu()
-                    },
-
-                    {   // install update
-                        label: "Install update!",
-                        id: "installUpdateID",
-                        visible: false,
-                        enabled: !isDev,
-                        click: () => installUpdate()
                     },
 
                     {   // choose if show notifications
@@ -908,22 +908,25 @@ if (!instanceLock) {
 
             }).then(message => {
 
-                if (message.response !== 0 && data.showAlerts) {
+                if (message.response !== 0) {
 
-                    // build update-alert notification
-                    const updateHelpNotif = new Notification({
-                        icon: updateIconHigh,
-                        title: "Update is still available!",
-                        body: 'Click "Install update!" to proceed with\nthe installation of the update',
-                        silent: false
-                    })
+                    if (data.showAlerts) {
 
-                    // show update-alert notification
-                    if (Notification.isSupported()) {
-                        updateHelpNotif.show()
-
-                        updateHelpNotif.on("close", () => updateHelpNotif.close())
-                        updateHelpNotif.on("click", () => updateHelpNotif.close())
+                        // build update-alert notification
+                        const updateHelpNotif = new Notification({
+                            icon: updateIconHigh,
+                            title: "Update is still available!",
+                            body: 'Click "Install update!" to proceed with\nthe installation of the update',
+                            silent: false
+                        })
+    
+                        // show update-alert notification
+                        if (Notification.isSupported()) {
+                            updateHelpNotif.show()
+    
+                            updateHelpNotif.on("close", () => updateHelpNotif.close())
+                            updateHelpNotif.on("click", () => updateHelpNotif.close())
+                        }
                     }
 
                 } else installUpdate()
