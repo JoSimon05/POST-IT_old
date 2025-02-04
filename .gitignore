@@ -1,5 +1,6 @@
 
 .database/
 node_modules/
+release_*/
 package-lock.json
 TODO
