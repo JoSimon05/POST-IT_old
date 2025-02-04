@@ -1,5 +1,5 @@
 
-const { ipcRenderer, clipboard } = require("electron")
+const { ipcRenderer, clipboard, webFrame } = require("electron")
 const linkify = require("linkifyjs")
 
 document.addEventListener("DOMContentLoaded", () => {

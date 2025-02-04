@@ -1,6 +1,8 @@
 
-const { ipcRenderer } = require("electron")
+const { ipcRenderer, webFrame } = require("electron")
 const linkify = require("linkifyjs")
+
+webFrame.setZoomFactor(1)
 
 document.addEventListener("DOMContentLoaded", () => {
 

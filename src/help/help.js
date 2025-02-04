@@ -1,5 +1,7 @@
 
-const { ipcRenderer, clipboard } = require("electron")
+const { ipcRenderer, clipboard, webFrame } = require("electron")
+
+webFrame.setZoomFactor(1)
 
 document.addEventListener("DOMContentLoaded", () => {
 
