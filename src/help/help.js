@@ -1,5 +1,5 @@
 
-const { ipcRenderer, clipboard, webFrame } = require("electron")
+const { clipboard, ipcRenderer, webFrame } = require("electron")
 
 webFrame.setZoomFactor(1)
 
