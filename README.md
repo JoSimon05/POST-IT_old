@@ -28,7 +28,7 @@
 
 <br> **ALT+C** &nbsp;&#10230;&nbsp; choose color of current Note
 
-  > Color menu can only be displayed when Input bar is opened
+  > Color menu can only be displayed when input bar is opened
 
 <br> **ALT+SHIFT+V** &nbsp;&#10230;&nbsp; move all Notes above other opened windows
 
