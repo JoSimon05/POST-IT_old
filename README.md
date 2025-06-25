@@ -6,6 +6,13 @@
 ![platform](https://img.shields.io/badge/Platform-Windows_(tested_on_W11)-0078d4?style=flat-square&labelColor=30363d)
 
 <br>
+<br>
+
+> [!IMPORTANT]
+> ### Consider installing the [New Version of POST-IT](https://github.com/JoSimon05/POST-IT)
+
+<br>
+<br>
 
 > **A minimal reminder app based on colorful sticky notes, which you can pin on your desktop**
 
