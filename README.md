@@ -16,16 +16,16 @@
 
 > **A minimal reminder app based on colorful sticky notes, which you can pin on your desktop**
 
-![note1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note1.png)
-![note2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note2.png)
-![note3](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note3.png)
-![note4](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/note4.png)
+![note1](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/note1.png)
+![note2](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/note2.png)
+![note3](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/note3.png)
+![note4](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/note4.png)
 
 <br>
 
 ## DEMO
 
-![demo](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/demo.gif)
+![demo](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/demo.gif)
 > *Demo relative to v1.4.0*
 
 <br>
@@ -49,7 +49,7 @@
 
   > Help cannot be closed by pressing the shortcut again
 
-<br> **ALT+SHIFT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#tray-context-menu)
+<br> **ALT+SHIFT+N** &nbsp;&#10230;&nbsp; open [Tray context menu](https://github.com/JoSimon05/POST-IT_old?tab=readme-ov-file#tray-context-menu)
 
 <br>
 
@@ -78,7 +78,7 @@ Every Note is stored inside a local database and reloaded on application startup
 The Tray context menu is the application main menu and It contains a lot of useful functions. You can find it in the lower right corner of your desktop (on taskbar).
 
 > [!TIP]
-> ![tray](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/tray.png)
+> ![tray](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/tray.png)
 
 <br>
 
@@ -86,7 +86,7 @@ The Tray context menu is the application main menu and It contains a lot of usef
 Updates are automatically checked and downloaded on startup, then you can choose when to install them.
 
 > [!NOTE]
-> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT?tab=readme-ov-file#local-storage)
+> Even if you install new versions of the application, you won't lose your [stored data](https://github.com/JoSimon05/POST-IT_old?tab=readme-ov-file#local-storage)
 
 <br>
 
@@ -99,7 +99,7 @@ Updates are automatically checked and downloaded on startup, then you can choose
 <br>
 
 # Try POST-IT!
-**Check [Releases](https://github.com/JoSimon05/POST-IT/releases) section and download the latest version available.**
+**Check [Releases](https://github.com/JoSimon05/POST-IT_old/releases) section and download the latest version available.**
 
 > You just need to download this file:&nbsp; **POST-IT_{version}_setup.exe**
 
@@ -109,18 +109,18 @@ Updates are automatically checked and downloaded on startup, then you can choose
 > Before installation by *installer.exe*, the system antivirus could show a security alert. DON'T WORRY! \
 > You just need to click on "**More info**"
 > 
-> ![alert1](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installation1.png)
+> ![alert1](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/installation1.png)
 > 
 > finally, click on the button "**Run anyway**" that appears next.
 > 
-> ![alert2](https://github.com/JoSimon05/POST-IT/blob/Latest/.github/installation2.png)
+> ![alert2](https://github.com/JoSimon05/POST-IT_old/blob/Latest/.github/installation2.png)
 >
 > > That's because *authentication certificate* for native applications is missing yet (It's not that cheap...)
 
 <br>
 
 > [!TIP]
-> If you have problems with the operation of the application (about shortcuts, visual defects, etc...), try restarting it (use "**Quit**" in Tray context menu). Even if problems persist, please report them in the [Issues](https://github.com/JoSimon05/POST-IT/issues) section.
+> If you have problems with the operation of the application (about shortcuts, visual defects, etc...), try restarting it (use "**Quit**" in Tray context menu). Even if problems persist, please report them in the [Issues](https://github.com/JoSimon05/POST-IT_old/issues) section.
 
 <br>
 
