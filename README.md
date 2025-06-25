@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note.ico" width="32"/> POST-IT &nbsp; [ UNMANTAINED ]
+# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note.ico" width="32"/> POST-IT &nbsp; [ UNMAINTAINED ]
 
 [![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
 ![framework](https://img.shields.io/badge/Framework-Electron-47848F?style=flat-square&labelColor=30363d)
