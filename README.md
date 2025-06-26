@@ -9,7 +9,7 @@
 
 > [!IMPORTANT]
 > ### Consider installing the [New Version of POST-IT](https://github.com/JoSimon05/POST-IT)
-> I'm sorry but I'm not able to update this version anymore..
+> This version is <ins>no longer maintained</ins>!
 
 <br>
 <br>
