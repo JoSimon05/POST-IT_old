@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/JoSimon05/POST-IT/blob/Latest/icons/note.ico" width="32"/> POST-IT &nbsp; [ UNMAINTAINED ]
+# <img src="https://github.com/JoSimon05/POST-IT_old/blob/Latest/icons/note.ico" width="32"/> POST-IT &nbsp; [ UNMAINTAINED ]
 
 [![release](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/JoSimon05/POST-IT_old/Latest/package.json&query=version&style=flat-square&label=Latest&labelColor=30363d&color=2ea043)](https://github.com/JoSimon05/POST-IT/releases) 
 ![framework](https://img.shields.io/badge/Framework-Electron-47848F?style=flat-square&labelColor=30363d)
@@ -10,6 +10,7 @@
 
 > [!IMPORTANT]
 > ### Consider installing the [New Version of POST-IT](https://github.com/JoSimon05/POST-IT)
+> I'm sorry but I'm not able to update this version anymore..
 
 <br>
 <br>
