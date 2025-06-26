@@ -12,6 +12,7 @@
 > I'm sorry but I'm not able to update this version anymore..
 
 <br>
+<br>
 
 > **A minimal reminder app based on colorful sticky notes, which you can pin on your desktop**
 
